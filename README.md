@@ -6,7 +6,7 @@ which means user only need to include normally 1 or 2 non-system header
 files to use a specific data structure or algorithm.
 Currently, bcplib is developed on gcc-4.
  
-Copyright (C) <2012>  <Yirui Zhang>  
+Copyright (C) 2012  Yirui Zhang   
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
