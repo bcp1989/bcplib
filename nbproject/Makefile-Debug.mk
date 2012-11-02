@@ -14,11 +14,11 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc
-CCC=g++
-CXX=g++
+CC=gcc.exe
+CCC=g++.exe
+CXX=g++.exe
 FC=gfortran
-AS=as
+AS=as.exe
 
 # Macros
 CND_PLATFORM=Cygwin_4.x-Windows
@@ -35,7 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/bitmap.o \
+	${OBJECTDIR}/iterator.o \
+	${OBJECTDIR}/list.o \
+	${OBJECTDIR}/collection.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/lib_base.o
 
 
 # C Compiler Flags
@@ -62,10 +67,35 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/bcplib.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/bcplib ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/bitmap.o: bitmap.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/bitmap.o bitmap.c
+
+${OBJECTDIR}/iterator.o: iterator.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/iterator.o iterator.c
+
+${OBJECTDIR}/list.o: list.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/list.o list.c
+
+${OBJECTDIR}/collection.o: collection.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/collection.o collection.c
+
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+
+${OBJECTDIR}/lib_base.o: lib_base.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib_base.o lib_base.c
 
 # Subprojects
 .build-subprojects:

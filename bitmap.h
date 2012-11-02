@@ -4,11 +4,10 @@
  *
  * Created on June 10, 2012, 3:37 PM
  * 
- *  bcplib is a c library of common data structures and algorithms. Not like 
- *  glib, the main design of bcplib is to make all data structures independent, 
- *  which means user only need to include normally 1 or 2 non-system header 
- *  files to use a specific data structure or algorithm.
- *  Currently, bcplib is developed on gcc-4.
+ *  bcplib is a OO c library of common data structures and algorithms. 
+ *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
+ *  And I also try to make all modules independent so that user may only need
+ *  a very limit subset of bcplib to run a specific module.
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -26,26 +25,49 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Bitmap
+ * A simple OO implementation of bitmap, can't be extended (but can be 
+ * inherited).
+ * 
+ * ChangeList
+ * ----------
+ * 11/1/2012
+ * + add common function of bitmap, such as set, flip...
+ * + change to OO, inherit base class.
+ * 
+ * TODO
+ * ----
+ * 1. Add assert test for all function.
+ * 2. Need to write separate test module.
+ * 3. Change to non-final class.
+ */
+
 #ifndef BITMAP_H
 #define	BITMAP_H
 #include <stddef.h>
+#include <stdint.h>
+#include "lib_base.h"
 
-typedef struct bitmap {
+DEFINE_CLASS(bcplib_bitmap, bitmap);
+typedef uint32_t bit_elem;
+
+typedef struct bcplib_bitmap {
+    object_prototype;
     size_t bit_num;
-    bit_elem *bits;    
-    
-}BITMAP;
+    bit_elem *bits;
+    void (*set)(bitmap b, size_t idx);
+    void (*clear)(bitmap b, size_t idx);
+    bool (*test)(bitmap b, size_t idx);
+    void (*flip)(bitmap b, size_t idx);
+    void (*set_multiple)(bitmap b, size_t n, size_t idxs, ...);
+    void (*clear_multiple)(bitmap b, size_t n, size_t idxs, ...);
+    void (*set_all)(bitmap b);
+    void (*clear_all)(bitmap b);
+}bitmap_t;
 
-extern struct bitmap *bitmap_create (size_t bits_num);
-extern struct bitmap *bitmap_destory (struct bitmap *bitmap);
-extern size_t bitmap_size (struct bitmap *b);
-extern void bitmap_set (struct bitmap *b, size_t idx);
-extern void bitmap_clear (struct bitmap *b, size_t idx);
-extern int bitmap_test (struct bitmap *b, size_t idx);
-extern void bitmap_flip (struct bitmap *b, size_t idx);
-extern void bitmap_set_multiple (struct bitmap *b, size_t n, size_t idxs, ...);
-extern void bitmap_clear_multiple (struct bitmap *b, size_t n, size_t idxs, ...);
-extern void bitmap_set_all (struct bitmap *b);
-extern void bitmap_clear_all (struct bitmap *b);
+extern bitmap bitmap_create(size_t bits_num);
+extern bitmap bitmap_destory(bitmap b);
+
 #endif	/* BITMAP_H */
 

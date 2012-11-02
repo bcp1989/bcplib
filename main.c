@@ -3,11 +3,10 @@
  * Author: Yirui Zhang
  * Created on October 31, 2012, 11:11 PM
  * 
- *  bcplib is a c library of common data structures and algorithms. Not like 
- *  glib, the main design of bcplib is to make all data structures independent, 
- *  which means user only need to include normally 1 or 2 non-system header 
- *  files to use a specific data structure or algorithm.
- *  Currently, bcplib is developed on gcc-4.
+ *  bcplib is a OO c library of common data structures and algorithms. 
+ *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
+ *  And I also try to make all modules independent so that user may only need
+ *  a very limit subset of bcplib to run a specific module.
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -28,10 +27,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bitmap.h"
+#include "collection.h"
 /*
+ * bcplib
  * 
+ * ChangeList
+ * ----------
+ * 11/1/2012
+ * + add bitmap
+ * + add iterator, collection, lib_base, list
+ * 
+ * TODO
+ * ----
+ * 1. document
  */
 int main(int argc, char** argv) {
+    // simple test for bitmap
+    bitmap b = bitmap_create(100);
+    b->set(b, 20);
+    printf ("bitmap set: %d\n", b->test(b, 20));
+    b->clear(b, 20);
+    printf ("bitmap clear: %d\n", b->test(b, 20));
+    
     return (EXIT_SUCCESS);
 }
 
