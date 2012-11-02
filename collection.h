@@ -77,7 +77,7 @@ typedef bool (*collection_contains_all_t)(id, id);
         type c2 = (type) obj2;\
         iterator_t c2itr = c2->get_iterator(c2);\
         while (c2itr.has_next(&c2itr)) {\
-                if (c1->call(c1, c2itr.next(&c2itr))) {\
+                if (!c1->call(c1, c2itr.next(&c2itr))) {\
                         return false;\
                 }\
         }\

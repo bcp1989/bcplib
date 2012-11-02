@@ -71,12 +71,13 @@ typedef int (*comparator)(void*, void*);
 /*
  * Description
  * -----------
- * Base class type, most of modules in bcplib is OO, and they all inherit
- * the base class type.
+ * Base class type, most of modules in bcplib is OO, and they all 
+ * inherit/extends the base class type.
  * OO in bcplib
  * ------------
  * *inherit* is using a different set of functions.
- * *extends* is using a different structure but put the prototype of its
+ * *extends* is using a different structure but put the prototype of its parent
+ * class as the first element in its structure.
  * *final class* have no class prototype so that other class cannot inherit or
  * extends it.
  * *Interface* is simple, in bcplib, a macro that defines a collection of 
@@ -89,7 +90,7 @@ typedef int (*comparator)(void*, void*);
  * *X_create_Y* functions where Y indicates the specific way to create a class.
  */
 DEFINE_CLASS(bcplib_object, object);
-typedef int (*object_equals_t)(id, id);
+typedef bool (*object_equals_t)(id, id);
 #define object_prototype                     object_equals_t equals
 
 struct bcplib_object {
