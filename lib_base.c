@@ -15,14 +15,31 @@ void object_init(id user_obj) {
     obj->equals = object_equals;
 }
 
+inline
+void object_finalize(id obj) {
+    // do nothing currently
+}
+
 static
 int object_equals(id this, id that) {
     return this == that;
 }
 
 /* Utilities */
+inline
+id _safe_cast(id obj) {
+    assert (obj != NULL);
+    return obj;
+}
 
-inline 
-bool check_index_range(size_t size, size_t idx) {
-    return idx >= 0 && idx < size;
+void* bcplib_malloc(size_t size) {
+    return malloc(size);
+}
+
+void* bcplib_realloc(void* pointer, size_t new_size) {
+    return realloc(pointer, new_size);
+}
+
+void bcplib_free(void* p){
+    free(p);
 }

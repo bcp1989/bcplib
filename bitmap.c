@@ -40,7 +40,7 @@ size_t byte_num(size_t bits_num) {
 }
 
 bitmap bitmap_create(size_t bits_num) {
-    bitmap ret = (bitmap) malloc(sizeof (struct bcplib_bitmap));
+    bitmap ret = (bitmap) bcplib_malloc(sizeof (struct bcplib_bitmap));
     // check malloc result
     if (ret == NULL) {
         return NULL;
@@ -49,10 +49,10 @@ bitmap bitmap_create(size_t bits_num) {
     size_t bytes = byte_num(bits_num);
     memset(ret, 0, sizeof (struct bcplib_bitmap));
     ret->bit_num = bits_num;
-    ret->bits = (bit_elem *) malloc(bytes);
+    ret->bits = (bit_elem *) bcplib_malloc(bytes);
     // check malloc result
     if (ret->bits == NULL) {
-        free(ret);
+        bcplib_free(ret);
         return NULL;
     }
 
@@ -75,8 +75,8 @@ bitmap bitmap_destory(bitmap bitmap) {
         return NULL;
     }
 
-    free(bitmap->bits);
-    free(bitmap);
+    bcplib_free(bitmap->bits);
+    bcplib_free(bitmap);
     return NULL;
 }
 

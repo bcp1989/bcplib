@@ -36,7 +36,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/bitmap.o \
+	${OBJECTDIR}/arraylist.o \
 	${OBJECTDIR}/iterator.o \
+	${OBJECTDIR}/list_iterator.o \
 	${OBJECTDIR}/list.o \
 	${OBJECTDIR}/collection.o \
 	${OBJECTDIR}/main.o \
@@ -72,10 +74,20 @@ ${OBJECTDIR}/bitmap.o: bitmap.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/bitmap.o bitmap.c
 
+${OBJECTDIR}/arraylist.o: arraylist.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/arraylist.o arraylist.c
+
 ${OBJECTDIR}/iterator.o: iterator.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/iterator.o iterator.c
+
+${OBJECTDIR}/list_iterator.o: list_iterator.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/list_iterator.o list_iterator.c
 
 ${OBJECTDIR}/list.o: list.c 
 	${MKDIR} -p ${OBJECTDIR}

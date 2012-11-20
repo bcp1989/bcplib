@@ -27,7 +27,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bitmap.h"
-#include "collection.h"
+#include "arraylist.h"
+
 /*
  * bcplib
  * 
@@ -40,15 +41,25 @@
  * TODO
  * ----
  * 1. document
+ * 2. Need to check pointer type inside each function, to make sure the pointer
+ *    is inherit/*extends* a specific class. Don't know how right now.
+ * 3. arraylist, linkedlist, set, map, hashmap, hashset, treeset, treemap
  */
 int main(int argc, char** argv) {
     // simple test for bitmap
-    bitmap b = bitmap_create(100);
-    b->set(b, 20);
-    printf ("bitmap set: %d\n", b->test(b, 20));
-    b->clear(b, 20);
-    printf ("bitmap clear: %d\n", b->test(b, 20));
-    
+    arraylist al = arraylist_create_by_size(1);
+    size_t i = 0;
+    for (i = 0; i < 15; ++i) {
+        int *tmp = (int *) malloc (sizeof(int));
+        *tmp = i;
+        al->add(al, tmp);
+    }
+    for (i = 0; i < 15; ++i) {
+        int *tmp = (int *)al->remove_at(al, 0);
+        printf ("%d\n", *tmp);
+        free(tmp);
+    }
+
     return (EXIT_SUCCESS);
 }
 

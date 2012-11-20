@@ -27,7 +27,8 @@
 
 /*
  * Collection
- * A abstract class that describe the concept collection.
+ * A abstract class that describe the concept collection. Refer to Java
+ * Collection and AbstractCollection.
  * 
  * ChangeList
  * ----------
@@ -48,6 +49,7 @@
 
 DEFINE_CLASS(bcplib_collection, collection);
 
+// define function types
 typedef bool (*collection_add_t)(id, void*);
 typedef bool (*collection_add_all_t)(id, id);
 typedef bool (*collection_remove_t)(id, void*);
@@ -57,7 +59,7 @@ typedef size_t(*collection_size_t)(id);
 typedef bool (*collection_is_empty_t)(id);
 typedef bool (*collection_contains_t)(id, void*);
 typedef bool (*collection_contains_all_t)(id, id);
-
+// define class prototype
 #define collection_prototype    object_prototype;\
                                 iterable_interface;\
                                 comparator compare;\
@@ -71,32 +73,14 @@ typedef bool (*collection_contains_all_t)(id, id);
                                 collection_contains_t contains;\
                                 collection_contains_all_t contains_all
 
-#define COLLECTION_a2b_SUB_CALL(type, obj1, obj2, call) \
-        assert(obj1 != NULL && obj2 != NULL);\
-        type c1 = (type) obj1;\
-        type c2 = (type) obj2;\
-        iterator_t c2itr = c2->get_iterator(c2);\
-        while (c2itr.has_next(&c2itr)) {\
-                if (!c1->call(c1, c2itr.next(&c2itr))) {\
-                        return false;\
-                }\
-        }\
-        return true
-
+// define core structure
 typedef struct bcplib_collection {
     collection_prototype;
 } collection_t;
 
-inline void collection_init(id, comparator,
-        collection_add_t,
-        collection_add_all_t,
-        collection_remove_t,
-        collection_remove_all_t,
-        collection_clear_t,
-        collection_size_t,
-        collection_is_empty_t,
-        collection_contains_t,
-        collection_contains_all_t);
+// define init. function
+extern inline void collection_init(id);
+extern inline void collection_finalize(id);
 
 #endif	/* COLLECTION_H */
 

@@ -50,6 +50,7 @@
 #include "lib_base.h"
 
 DEFINE_CLASS(bcplib_bitmap, bitmap);
+
 typedef uint32_t bit_elem;
 
 typedef struct bcplib_bitmap {

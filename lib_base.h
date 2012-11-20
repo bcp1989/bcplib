@@ -46,7 +46,7 @@
 #include <stdlib.h>
 
 #ifndef bool
-typedef int bool;
+#define bool int
 #endif
 
 #ifndef true
@@ -59,7 +59,7 @@ typedef int bool;
 
 #define id void*
 #define DEFINE_CLASS(struct_name, class_name) typedef struct struct_name* class_name
-
+#define safe_cast(type, obj) ((type) _safe_cast(obj))
 
 
 /* 
@@ -98,9 +98,13 @@ struct bcplib_object {
 };
 
 extern inline void object_init(id);
+extern inline void object_finalize(id);
 
 /* Utilities */
-inline bool check_index_range(size_t, size_t);
+extern inline id _safe_cast(id obj);
+extern void* bcplib_malloc(size_t size);
+extern void* bcplib_realloc(void* pointer, size_t new_size);
+extern void bcplib_free(void* p);
 
 #endif	/* LIB_BASE_H */
 

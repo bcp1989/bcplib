@@ -1,0 +1,9 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=00402A71
+eax=0000000B ebx=800101C8 ecx=0000000E edx=80010238 esi=0000000F edi=0000000B
+ebp=0028AC58 esp=0028AC30 program=E:\Dropbox\Projects\bcplib\dist\Release\Cygwin_4.x-Windows\bcplib.exe, pid 3244, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+0028AC58  00402A71  (00000001, 0028AC80, 80010100, 6127608C)
+0028ACE8  6100763A  (00000000, 0028CD68, 61006C50, 00000000)
+End of stack trace

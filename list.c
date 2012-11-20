@@ -1,90 +1,82 @@
 #include "list.h"
-static bool list_remove(id, void*);
-static void* list_remove_at(id, size_t);
-static bool list_contains(id, void*);
+static bool list_add(id obj, void* user_data);
 static size_t list_index_of(id, void*);
 static size_t list_last_index_of(id, void*);
+static iterator list_create_iterator(id);
+static iterator list_destory_iterator(id, id);
+static list_iterator list_destory_list_iterator(id, id);
 
 inline
-void list_init(id obj, comparator cmp,
-        collection_add_t c_add,
-        collection_add_all_t c_add_all,
-        collection_remove_t c_remove,
-        collection_remove_all_t c_remove_all,
-        collection_clear_t c_clear,
-        collection_size_t c_size,
-        collection_is_empty_t c_is_empty,
-        collection_contains_t c_contains,
-        collection_contains_all_t c_contains_all,
-        // list functions
-        list_add_at_t add_at,
-        list_get_t get,
-        list_set_t set,
-        list_remove_at_t remove_at,
-        list_index_of_t index_of,
-        list_last_index_of_t last_index_of) {
-    
+void check_index_range(size_t idx, size_t from, size_t to) {
+    assert(idx < to && idx >= from);
+}
+
+inline
+void list_init(id obj) {
     list l = (list) obj;
-    assert(obj != NULL && get != NULL && add_at != NULL && set != NULL);
-    assert(c_remove != NULL || remove_at != NULL);
-    
-    c_contains = c_contains == NULL ? list_contains : c_contains;
-    c_remove = c_remove == NULL ? list_remove : c_remove;    
-    collection_init(l, cmp, c_add, c_add_all, c_remove, c_remove_all, c_clear,
-            c_size, c_is_empty, c_contains, c_contains_all);
-    l->index_of = index_of == NULL ? list_index_of : index_of;
-    l->last_index_of = last_index_of == NULL ? 
-        list_last_index_of : last_index_of;
-    l->remove_at = remove_at == NULL ? list_remove_at : remove_at;
-    l->add_at = add_at;
-    l->get = get;
-    l->set = set;
+    collection_init(l);
+    l->add = list_add;
+    l->index_of = list_index_of;
+    l->last_index_of = list_last_index_of;
+    l->create_iterator = list_create_iterator;
+    l->destory_iterator = list_destory_iterator;
+    l->destory_list_iterator = list_destory_list_iterator;
+}
+
+inline
+void list_finalize(id obj) {
+    collection_finalize(obj);
+    // nothing to finalize
+}
+
+/* Default functions */
+
+static
+iterator list_create_iterator(id obj) {
+    list l = (list) obj;
+    assert(l != NULL);
+    return (iterator) l->create_list_iterator(l, 0);
 }
 
 static
-bool list_remove(id obj, void* user_data) {
+iterator list_destory_iterator(id obj, id itr) {
+    list l = (list) obj;
+    assert(l != NULL);
+    // EXPERIMENT Can I cast a NULL pointer to any type in common compiler?
+    return (iterator) l->destory_list_iterator(l, itr);
+}
+
+
+static
+list_iterator list_destory_list_iterator(id obj, id itr) {
+    list_iterator list_itr = (list_iterator) safe_cast(list_iterator, itr);
+    list_iterator_finalize(list_itr);
+    bcplib_free(list_itr);
+    return NULL;
+}
+
+
+static
+bool list_add(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
-    
-    size_t idx = l->index_of(l, user_data);
-    if (idx < 0) {
-        return false;
-    }
-    //NOTE only remove once!
-    l->remove_at(l, idx);
+    l->add_at(l, l->size(l), user_data);
     return true;
-}
-
-static
-void* list_remove_at(id obj, size_t idx) {
-    list l = (list) obj;
-    assert(obj != NULL && check_index_range(l->size(l), idx));
-
-    void* user_data = l->get(l, idx);
-    // NOTE haven't process the return value
-    l->remove(l, user_data);
-    return user_data;
-}
-
-static
-bool list_contains(id obj, void* user_data) {
-    list l = (list) obj;
-    assert(obj != NULL);
-    return l->index_of(l, user_data) >= 0;
 }
 
 static
 size_t list_index_of(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
-    size_t i = 0, len = l->size(l);
-    void* p = NULL;
-    for (i = 0; i < len; ++i) {
-        p = l->get(l, i);
-        if (l->compare(p, user_data) == 0) {
-            return i;
+    list_iterator itr = l->create_list_iterator(l, 0);
+    while (itr->has_next(itr)) {
+        if (l->compare(itr->next(itr), user_data) == 0) {
+            size_t ret = itr->previous_index(itr);
+            l->destory_list_iterator(l, itr);
+            return ret;
         }
     }
+    l->destory_list_iterator(l, itr);
     return -1;
 }
 
@@ -92,13 +84,14 @@ static
 size_t list_last_index_of(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
-    size_t i = 0, len = l->size(l);
-    void* p = NULL;
-    for (i = len - 1; i >= 0; --i) {
-        p = l->get(l, i);
-        if (l->compare(p, user_data) == 0) {
-            return i;
+    list_iterator itr = l->create_list_iterator(l, l->size(l));
+    while (itr->has_previous(itr)) {
+        if (l->compare(itr->previous(itr), user_data) == 0) {
+            size_t ret = itr->next_index(itr);
+            l->destory_list_iterator(l, itr);
+            return ret;
         }
     }
+    l->destory_list_iterator(l, itr);
     return -1;
 }
