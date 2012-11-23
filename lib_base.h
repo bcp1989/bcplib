@@ -106,5 +106,6 @@ extern void* bcplib_malloc(size_t size);
 //extern void* bcplib_realloc(void* pointer, size_t new_size);
 extern void bcplib_free(void* p);
 extern void bcplib_array_copy(void** from, void** to, size_t offset, size_t length);
+// jhkhjjh
 #endif	/* LIB_BASE_H */
 
