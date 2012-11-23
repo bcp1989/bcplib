@@ -93,14 +93,14 @@ arraylist arraylist_create_by_data(void** init_data, size_t size) {
     return al;
 }
 
-arraylist arraylist_create_by_collection(id obj) {   
+arraylist arraylist_create_by_collection(id obj) {
     collection c = safe_cast(collection, obj);
     arraylist al = arraylist_create_by_size(c->size(c));
     al->add_all(al, c);
     return al;
 }
 
-arraylist arraylist_destory(arraylist obj) {
+arraylist arraylist_destroy(arraylist obj) {
     arraylist_finalize(obj);
     bcplib_free(obj);
     return NULL;
@@ -284,11 +284,18 @@ void arraylist_ensure_capacity(id obj, size_t new_cap) {
             }
             ++times;
         }
-        void** new_elements = (void**) bcplib_realloc(al->elements,
-                cap_inc + al->capacity);
+        //void** new_elements = (void**) bcplib_realloc(al->elements,
+        //        cap_inc + al->capacity);
+        void** new_elements = (void**) bcplib_malloc(
+                sizeof (void *) * (cap_inc + al->capacity));
+        size_t i = 0;
+        // TODO extract to system copy
+        for (i = 0; i < al->capacity; ++i) {
+            new_elements[i] = al->elements[i];
+        }
+
         // TODO optimize
         assert(new_elements != NULL);
-        size_t i = 0;
         bcplib_free(al->elements);
         al->elements = new_elements;
         al->capacity += cap_inc;
@@ -301,7 +308,7 @@ bool arraylist_iterator_has_next(id obj) {
     list_iterator itr = safe_cast(list_iterator, obj);
     arraylist al = (arraylist) (itr->host);
 
-    return itr->next_index(itr) < al->arraylist_size;
+    return itr->cursor < al->arraylist_size;
 }
 
 static

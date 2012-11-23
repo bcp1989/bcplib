@@ -4,11 +4,8 @@
  *
  * Created on November 2, 2012, 4:06 PM
  * 
- *  bcplib is a c library of common data structures and algorithms. Not like 
- *  glib, the main design of bcplib is to make all data structures independent, 
- *  which means user only need to include normally several non-system header 
- *  files to use a specific data structure or algorithm.
- *  Currently, bcplib is developed on gcc-4.
+ *  bcplib is a object-oriented C language library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -56,7 +53,7 @@ extern arraylist arratlist_create_by_size_comparator(size_t size, comparator cmp
 extern arraylist arraylist_create_by_data(void** init_data, size_t size);
 extern arraylist arraylist_create_by_collection(id obj);
 
-extern arraylist arraylist_destory(arraylist obj);
+extern arraylist arraylist_destroy(arraylist obj);
 
 
 #endif	/* ARRAYLIST_H */

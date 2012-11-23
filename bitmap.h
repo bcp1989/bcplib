@@ -4,10 +4,8 @@
  *
  * Created on June 10, 2012, 3:37 PM
  * 
- *  bcplib is a OO c library of common data structures and algorithms. 
- *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
- *  And I also try to make all modules independent so that user may only need
- *  a very limit subset of bcplib to run a specific module.
+ *  bcplib is a object-oriented c library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -68,7 +66,7 @@ typedef struct bcplib_bitmap {
 }bitmap_t;
 
 extern bitmap bitmap_create(size_t bits_num);
-extern bitmap bitmap_destory(bitmap b);
+extern bitmap bitmap_destroy(bitmap b);
 
 #endif	/* BITMAP_H */
 

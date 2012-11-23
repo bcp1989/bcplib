@@ -3,10 +3,8 @@
  * Author: Yirui Zhang
  * Created on October 31, 2012, 11:11 PM
  * 
- *  bcplib is a OO c library of common data structures and algorithms. 
- *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
- *  And I also try to make all modules independent so that user may only need
- *  a very limit subset of bcplib to run a specific module.
+ *  bcplib is a object-oriented c library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -31,35 +29,26 @@
 
 /*
  * bcplib
- * 
- * ChangeList
- * ----------
- * 11/1/2012
- * + add bitmap
- * + add iterator, collection, lib_base, list
- * 
- * TODO
- * ----
- * 1. document
- * 2. Need to check pointer type inside each function, to make sure the pointer
- *    is inherit/*extends* a specific class. Don't know how right now.
- * 3. arraylist, linkedlist, set, map, hashmap, hashset, treeset, treemap
  */
 int main(int argc, char** argv) {
     // simple test for bitmap
-    arraylist al = arraylist_create_by_size(1);
+    arraylist al = arraylist_create_by_size(1000);
     size_t i = 0;
-    for (i = 0; i < 15; ++i) {
-        int *tmp = (int *) malloc (sizeof(int));
+    for (i = 0; i < 10000; ++i) {
+        int *tmp = (int *) malloc(sizeof (int));
         *tmp = i;
-        al->add(al, tmp);
-    }
-    for (i = 0; i < 15; ++i) {
-        int *tmp = (int *)al->remove_at(al, 0);
-        printf ("%d\n", *tmp);
-        free(tmp);
+        ((collection)al)->add(al, tmp);
     }
 
+    iterator itr = al->create_iterator(al);
+    while (itr->has_next(itr)) {
+        int *tmp = (int *)itr->next(itr);
+        printf ("%d\n", *tmp);
+        itr->remove(itr);
+    }
+    al->destory_iterator(al, itr);
+    printf ("%d %d\n", al->is_empty(al), al->size(al));
+    arraylist_destroy(al);
     return (EXIT_SUCCESS);
 }
 

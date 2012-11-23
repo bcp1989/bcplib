@@ -11,7 +11,7 @@ static int object_equals(id this, id that);
  */
 inline
 void object_init(id user_obj) {
-    object obj = (object)user_obj;
+    object obj = (object) user_obj;
     obj->equals = object_equals;
 }
 
@@ -28,7 +28,7 @@ int object_equals(id this, id that) {
 /* Utilities */
 inline
 id _safe_cast(id obj) {
-    assert (obj != NULL);
+    assert(obj != NULL);
     return obj;
 }
 
@@ -37,9 +37,19 @@ void* bcplib_malloc(size_t size) {
 }
 
 void* bcplib_realloc(void* pointer, size_t new_size) {
+
     return realloc(pointer, new_size);
 }
 
-void bcplib_free(void* p){
+void bcplib_free(void* p) {
     free(p);
+}
+
+void bcplib_array_copy(void** from, void** to, size_t offset, size_t length) {
+    assert(from != NULL && to != NULL);
+    assert(offset >= 0 && length >= 0);
+    size_t i = 0;
+    for (i = 0; i < length; ++i) {
+        to[i] = from[offset + i];
+    }
 }

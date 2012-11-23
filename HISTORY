@@ -1,0 +1,18 @@
+TODO List
+---------
+ 1. document
+ 2. Test module
+ 3. Need to check pointer type inside each function, to make sure the pointers 
+    inherit/*extends* a specific class. Don't know how right now.
+ 4. arraylist, linkedlist, set, map, hashmap, hashset, treeset, treemap
+
+11/19/2012
+----------
++ Add list_iterator class, a special list_iterator for all list
+  classes.
++ Add arraylist class.
+
+11/1/2012
+----------
++ Add bitmap
++ Add iterator, collection, lib_base, list

@@ -4,10 +4,8 @@
  *
  * Created on November 1, 2012, 5:50 PM
  * 
- *  bcplib is a OO c library of common data structures and algorithms. 
- *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
- *  And I also try to make all modules independent so that user may only need
- *  a very limit subset of bcplib to run a specific module.
+ *  bcplib is a object-oriented c library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
@@ -44,6 +42,7 @@
 #include <stddef.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #ifndef bool
 #define bool int
@@ -60,6 +59,7 @@
 #define id void*
 #define DEFINE_CLASS(struct_name, class_name) typedef struct struct_name* class_name
 #define safe_cast(type, obj) ((type) _safe_cast(obj))
+
 
 
 /* 
@@ -103,8 +103,8 @@ extern inline void object_finalize(id);
 /* Utilities */
 extern inline id _safe_cast(id obj);
 extern void* bcplib_malloc(size_t size);
-extern void* bcplib_realloc(void* pointer, size_t new_size);
+//extern void* bcplib_realloc(void* pointer, size_t new_size);
 extern void bcplib_free(void* p);
-
+extern void bcplib_array_copy(void** from, void** to, size_t offset, size_t length);
 #endif	/* LIB_BASE_H */
 

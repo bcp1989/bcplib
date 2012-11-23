@@ -4,10 +4,8 @@
  *
  * Created on November 1, 2012, 2:37 PM
  * 
- *  bcplib is a OO c library of common data structures and algorithms. 
- *  The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
- *  And I also try to make all modules independent so that user may only need
- *  a very limit subset of bcplib to run a specific module.
+ *  bcplib is a object-oriented c library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 

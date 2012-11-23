@@ -70,7 +70,7 @@ bitmap bitmap_create(size_t bits_num) {
     return ret;
 }
 
-bitmap bitmap_destory(bitmap bitmap) {
+bitmap bitmap_destroy(bitmap bitmap) {
     if (bitmap == NULL) {
         return NULL;
     }

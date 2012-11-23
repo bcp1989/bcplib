@@ -4,11 +4,8 @@
  *
  * Created on November 1, 2012, 9:00 PM
  * 
- *  bcplib is a c library of common data structures and algorithms. Not like 
- *  glib, the main design of bcplib is to make all data structures independent, 
- *  which means user only need to include normally several non-system header 
- *  files to use a specific data structure or algorithm.
- *  Currently, bcplib is developed on gcc-4.
+ *  bcplib is a object-oriented c library of common data structures and 
+ *  algorithms. 
  * 
  *  Copyright (C) <2012>  <Yirui Zhang>
  * 
