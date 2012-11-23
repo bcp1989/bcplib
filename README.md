@@ -20,17 +20,17 @@ The interface of bcplib is very simple.
 
 Create && destroy Object
 ------------------------
-If a class is named A, you can use 'A_create_xxxx' (xxxx is specific create 
+If a class is named A, you can use `A_create_xxxx` (xxxx is specific create 
 method that may needs extra arguments) functions to create a instance, you can 
-use 'A_destroy' function to destroy a instance.
-For example, 'arraylist al = arraylist_create();' will create a array list with
-default capacity. 'arraylist al = arraylist_destroy(al);' will destroy it.
+use `A_destroy` function to destroy a instance.
+For example, `arraylist al = arraylist_create();` will create a array list with
+default capacity. `arraylist al = arraylist_destroy(al);` will destroy it.
 The creation and destruction function are not OO.
 
 Function call
 -------------
 If a class is named A, and there is a instance of A called a, you can use 
-'a->function_name(a, other_arguments);' to make a function call, remember to 
+`a->function_name(a, other_arguments);` to make a function call, remember to 
 put the instance itself as the first argument of any function call, it's a
 naive way to simulate *this* reference in Java.
 
@@ -52,13 +52,13 @@ incompatible with the "normal" rule of software development.
 + *id*, a universal pointers to *Object* in bcplib, just like *id* in 
   Objective-C. Nearly every *Object Function* takes a *id* as input, to simulate
   the *this* reference. Inside each *Object Function*, the function first cast 
-  the *id* to the type it needs so that user don't have to do the cast when use
+  the *id* to the type it needs so that user don`t have to do the cast when use
   a function of parent class. 
 + Every class type is a pointer type. For example, "arraylist" is actually
   "arraylist_t \*". You can also use your own way to allocate the structure and
   use initialize a class instead of create function. For example, normally, you
-  write 'arraylist a = arraylist_create();', here *a* is a pointer type; and you
-  can also write 'arraylist_t a;' and then use 'arraylist_init(&a);' to
+  write `arraylist a = arraylist_create();`, here *a* is a pointer type; and you
+  can also write `arraylist_t a;` and then use `arraylist_init(&a);` to
   initialize it, here *a* is a structure type.
 
 Class
