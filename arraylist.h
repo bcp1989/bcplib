@@ -55,7 +55,7 @@ extern arraylist arraylist_create_by_size_comparator(size_t size, comparator cmp
 extern arraylist arraylist_create_by_data(void** init_data, size_t size);
 extern arraylist arraylist_create_by_collection(id obj);
 // Destruction functions.
-extern arraylist arraylist_destroy(arraylist obj);
+extern void arraylist_destroy(id obj);
 
 /* Functions of arraylist class */
 /* Collection functions */
@@ -73,7 +73,6 @@ extern size_t arraylist_index_of(id obj, void* user_data);
 extern size_t arraylist_last_index_of(id obj, void* user_data);
 /* List iterator interface */
 extern list_iterator arraylist_create_list_iterator(id obj, size_t idx);
-extern list_iterator arraylist_destroy_list_iterator(id obj, id itr);
 /* Array list function */
 extern void arraylis_trim_to_size(id obj);
 extern void arraylist_ensure_capacity(id obj, size_t new_cap);
@@ -81,6 +80,7 @@ extern void arraylist_ensure_capacity(id obj, size_t new_cap);
 extern void* arraylist_iterator_next(id obj);
 extern void arraylist_iterator_remove(id obj);
 /* List iterator functions */
+extern void arraylist_list_iterator_destroy(id obj);
 extern void arraylist_list_iterator_add(id obj, void* user_data);
 extern void arraylist_list_iterator_set(id obj, void* user_data);
 extern void* arraylist_list_iterator_previous(id obj);

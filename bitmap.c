@@ -59,6 +59,7 @@ bitmap bitmap_create(size_t bits_num) {
     memset(ret->bits, 0, bytes);
     // init functions
     object_init(ret);
+    ret->destroy = bitmap_destroy;
     ret->clear = bitmap_clear;
     ret->clear_all = bitmap_clear_all;
     ret->clear_multiple = bitmap_clear_multiple;
@@ -70,14 +71,10 @@ bitmap bitmap_create(size_t bits_num) {
     return ret;
 }
 
-bitmap bitmap_destroy(bitmap bitmap) {
-    if (bitmap == NULL) {
-        return NULL;
-    }
-
-    bcplib_free(bitmap->bits);
-    bcplib_free(bitmap);
-    return NULL;
+void bitmap_destroy(id obj) {
+    bitmap b = safe_cast(bitmap, obj);
+    bcplib_free(b->bits);
+    bcplib_free(b);
 }
 
 static

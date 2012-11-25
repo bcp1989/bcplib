@@ -33,16 +33,16 @@
  */
 
 int my_compare(void* data1, void* data2) {
-    assert(data1 != NULL && data2 != NULL);
     return ((*((int *)data1)) - (*((int *) data2)));
 }
 
 int main(int argc, char** argv) {
     // simple test for bitmap
-    //arraylist l = arraylist_create_by_size_comparator(1000, my_compare);
-    linkedlist l = linkedlist_create_by_comparator(my_compare);
+    arraylist l = create2(arraylist, size, 1000, comparator, my_compare);
+    //linkedlist l = linkedlist_create_by_comparator(my_compare);
+    //linkedlist l = create1(linkedlist, comparator, my_compare);
     size_t i = 0;
-    for (i = 0; i < 10000; ++i) {
+    for (i = 0; i < 1000; ++i) {
         int *tmp = (int *) malloc(sizeof (int));
         *tmp = i;
         l->add(l, tmp);
@@ -55,10 +55,10 @@ int main(int argc, char** argv) {
         //printf("%d\n", *tmp);
         itr->remove(itr);
     }
-    l->destroy_iterator(l, itr);
+    destroy(itr);
     printf("%d %d\n", l->is_empty(l), l->size(l));
-    linkedlist_destroy(l);
-    //arraylist_destroy(l);
+    //linkedlist_destroy(l);
+    destroy(l);
     printf("%d\n", sizeof (linkedlist_t));
     return (EXIT_SUCCESS);
 }

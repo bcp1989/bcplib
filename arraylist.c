@@ -18,6 +18,8 @@ void arraylist_init_by_size(id obj, size_t size) {
     assert(size > 0);
     // call super.init
     list_init(al);
+    // init object
+    al->destroy = arraylist_destroy;
     // init. collection functions
     al->remove = arraylist_remove;
     al->clear = arraylist_clear;
@@ -39,7 +41,6 @@ void arraylist_init_by_size(id obj, size_t size) {
     al->ensure_capacity = arraylist_ensure_capacity;
     // init. list iterator interface
     al->create_list_iterator = arraylist_create_list_iterator;
-    al->destroy_list_iterator = arraylist_destroy_list_iterator;
 }
 
 inline
@@ -84,10 +85,9 @@ arraylist arraylist_create_by_collection(id obj) {
     return al;
 }
 
-arraylist arraylist_destroy(arraylist obj) {
+void arraylist_destroy(id obj) {
     arraylist_finalize(obj);
     bcplib_free(obj);
-    return NULL;
 }
 
 /* Candidate functions */
@@ -205,6 +205,8 @@ list_iterator arraylist_create_list_iterator(id obj, size_t idx) {
     check_index_range(idx, 0, al->arraylist_size + 1);
     list_iterator itr = (list_iterator) bcplib_malloc(sizeof (list_iterator_t));
     list_iterator_init(itr, al, NULL);
+    // init object
+    itr->destroy = arraylist_list_iterator_destroy;
     // init iterator functions
     itr->next = arraylist_iterator_next;
     itr->remove = arraylist_iterator_remove;
@@ -216,10 +218,10 @@ list_iterator arraylist_create_list_iterator(id obj, size_t idx) {
     return itr;
 }
 
-list_iterator arraylist_destroy_list_iterator(id obj, id itr) {
-    list_iterator list_itr = safe_cast(list_iterator, itr);
+void arraylist_list_iterator_destroy(id obj) {
+    list_iterator list_itr = safe_cast(list_iterator, obj);
     bcplib_free(list_itr->aux);
-    return list_destroy_list_iterator(obj, itr);
+    bcplib_free(list_itr);
 }
 
 /* Array list function */

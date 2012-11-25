@@ -14,8 +14,6 @@ void list_init(id obj) {
     l->index_of = list_index_of;
     l->last_index_of = list_last_index_of;
     l->create_iterator = list_create_iterator;
-    l->destroy_iterator = list_destroy_iterator;
-    l->destroy_list_iterator = list_destroy_list_iterator;
 }
 
 inline
@@ -25,25 +23,10 @@ void list_finalize(id obj) {
 }
 
 /* Default functions */
-
 iterator list_create_iterator(id obj) {
     list l = (list) obj;
     assert(l != NULL);
     return (iterator) l->create_list_iterator(l, 0);
-}
-
-iterator list_destroy_iterator(id obj, id itr) {
-    list l = (list) obj;
-    assert(l != NULL);
-    // EXPERIMENT Can I cast a NULL pointer to any type in common compiler?
-    return (iterator) l->destroy_list_iterator(l, itr);
-}
-
-list_iterator list_destroy_list_iterator(id obj, id itr) {
-    list_iterator list_itr = safe_cast(list_iterator, itr);
-    list_iterator_finalize(list_itr);
-    bcplib_free(list_itr);
-    return NULL;
 }
 
 bool list_add(id obj, void* user_data) {
@@ -60,11 +43,11 @@ size_t list_index_of(id obj, void* user_data) {
     while (itr->has_next(itr)) {
         if (l->compare(itr->next(itr), user_data) == 0) {
             size_t ret = itr->previous_index(itr);
-            l->destroy_list_iterator(l, itr);
+            destroy(itr);
             return ret;
         }
     }
-    l->destroy_list_iterator(l, itr);
+    destroy(itr);
     return -1;
 }
 
@@ -75,10 +58,10 @@ size_t list_last_index_of(id obj, void* user_data) {
     while (itr->has_previous(itr)) {
         if (l->compare(itr->previous(itr), user_data) == 0) {
             size_t ret = itr->next_index(itr);
-            l->destroy_list_iterator(l, itr);
+            destroy(itr);
             return ret;
         }
     }
-    l->destroy_list_iterator(l, itr);
+    destroy(itr);
     return -1;
 }

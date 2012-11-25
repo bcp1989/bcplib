@@ -12,6 +12,8 @@
       <itemPath>linkedlist.h</itemPath>
       <itemPath>list.h</itemPath>
       <itemPath>list_iterator.h</itemPath>
+      <itemPath>map.h</itemPath>
+      <itemPath>set.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -32,6 +34,8 @@
       <itemPath>list.c</itemPath>
       <itemPath>list_iterator.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>map.c</itemPath>
+      <itemPath>set.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

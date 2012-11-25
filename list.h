@@ -57,8 +57,6 @@ extern bool list_add(id obj, void* user_data);
 extern size_t list_index_of(id, void*);
 extern size_t list_last_index_of(id, void*);
 extern iterator list_create_iterator(id);
-extern iterator list_destroy_iterator(id, id);
-extern list_iterator list_destroy_list_iterator(id, id);
 /* utilities */
 extern inline void check_index_range(size_t idx, size_t from, size_t to);
 #endif	/* LIST_H */

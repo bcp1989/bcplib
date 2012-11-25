@@ -23,10 +23,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Abstract class Set.
+ */
+
 #ifndef SET_H
 #define	SET_H
+#include "collection.h"
+// define class
+DEFINE_CLASS(bcplib_set, set);
+// define prototype
+#define set_prototype   collection_prototype
+// define c structure
+typedef struct bcplib_set {
+    set_prototype;
+}set_t;
 
-
+extern void set_init(id obj);
+extern void set_finalize(id obj);
 
 #endif	/* SET_H */
 

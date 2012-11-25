@@ -91,7 +91,7 @@ class with some functions defined in *arraylist.c*.
 
 Extends
 -------
-Extends in bcclib is like Java. Class A extends class B means that A has all
+Extends in bcplib is like Java. Class A extends class B means that A has all
 function declarations and data that B has, and A may has its own functions or 
 data that B does not have. In the prototype of A, the prototype of B should be 
 the first element so that we can cast A to B. However, this trick way is 

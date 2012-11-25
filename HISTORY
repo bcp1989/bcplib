@@ -11,6 +11,8 @@ TODO List
 ----------
 + Add linkedlist.
 + Optimize arraylist_list_iterator.
++ Add universal create and destroy mechanism
++ Add definition of map, set
 
 11/19/2012
 ----------

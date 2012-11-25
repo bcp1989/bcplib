@@ -55,6 +55,8 @@ void linkedlist_init(id obj) {
     ll->size = linkedlist_size;
     // init. list iterator interface
     ll->create_list_iterator = linkedlist_create_list_iterator;
+    // init object
+    ll->destroy = linkedlist_destroy;
 }
 
 inline
@@ -77,11 +79,10 @@ linkedlist linkedlist_create() {
     return linkedlist_create_by_comparator(collection_compare);
 }
 
-linkedlist linkedlist_destroy(id obj) {
+void linkedlist_destroy(id obj) {
     linkedlist ll = safe_cast(linkedlist, obj);
     linkedlist_finalize(ll);
     bcplib_free(ll);
-    return NULL;
 }
 
 /* Utilities */
@@ -321,6 +322,8 @@ list_iterator linkedlist_create_list_iterator(id obj, size_t idx) {
     list_iterator itr = (list_iterator) bcplib_malloc(sizeof (list_iterator_t));
     list_iterator_init(itr, ll,
             idx == ll->linkedlist_size ? ll->head : locate_node(ll, idx));
+    // init object
+    itr->destroy = linkedlist_list_iterator_destroy;
     // init list iterator functions
     itr->add = linkedlist_list_iterator_add;
     itr->set = linkedlist_list_iterator_set;
@@ -365,6 +368,11 @@ void linkedlist_iterator_remove(id obj) {
 }
 
 /* List iterator */
+void linkedlist_list_iterator_destroy(id obj) {
+    list_iterator itr = safe_cast(list_iterator, obj);
+    bcplib_free(itr);
+}
+
 void linkedlist_list_iterator_add(id obj, void* data) {
     list_iterator itr = safe_cast(list_iterator, obj);
     assert(itr->change != 0);

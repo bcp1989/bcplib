@@ -39,10 +39,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/arraylist.o \
 	${OBJECTDIR}/iterator.o \
 	${OBJECTDIR}/list_iterator.o \
+	${OBJECTDIR}/map.o \
 	${OBJECTDIR}/linkedlist.o \
 	${OBJECTDIR}/list.o \
 	${OBJECTDIR}/collection.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/set.o \
 	${OBJECTDIR}/lib_base.o
 
 
@@ -90,6 +92,11 @@ ${OBJECTDIR}/list_iterator.o: list_iterator.c
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/list_iterator.o list_iterator.c
 
+${OBJECTDIR}/map.o: map.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/map.o map.c
+
 ${OBJECTDIR}/linkedlist.o: linkedlist.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -109,6 +116,11 @@ ${OBJECTDIR}/main.o: main.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+
+${OBJECTDIR}/set.o: set.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/set.o set.c
 
 ${OBJECTDIR}/lib_base.o: lib_base.c 
 	${MKDIR} -p ${OBJECTDIR}

@@ -31,9 +31,7 @@ DEFINE_CLASS(bcplib_iterator, iterator);
 
 // define iterator interface
 typedef iterator (*iterator_create_iterator_t)(id);
-typedef iterator (*iterator_destroy_iterator_t)(id, id);
-#define iterable_interface      iterator_create_iterator_t create_iterator;\
-                                iterator_destroy_iterator_t destroy_iterator
+#define iterable_interface      iterator_create_iterator_t create_iterator
                                 
 // define iterator prototype
 typedef bool (*iterator_has_next_t)(id);

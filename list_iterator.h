@@ -35,11 +35,9 @@
 // define class
 DEFINE_CLASS(bcplib_list_iterator, list_iterator);
 // define list iterator interface
-typedef list_iterator (*list_iterator_destroy_list_iterator_t)(id, id);
 typedef list_iterator (*list_iterator_create_list_iterator_t)(id, size_t);
 #define list_iterator_interface \
-        list_iterator_create_list_iterator_t create_list_iterator;\
-        list_iterator_destroy_list_iterator_t destroy_list_iterator
+        list_iterator_create_list_iterator_t create_list_iterator
 // define list iterator prototype
 typedef void (*list_iterator_add_t)(id, void*);
 typedef void (*list_iterator_set_t)(id, void*);

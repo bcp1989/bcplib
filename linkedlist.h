@@ -24,7 +24,9 @@
  */
 
 /*
- * A implementation of double circled linked list.
+ * A implementation of double circled linked list. 
+ * Like Java, this linked list never expose its internal node to user.
+ * Sub-classes should follow this rule.
  */
 
 #ifndef LINKEDLIST_H
@@ -63,7 +65,7 @@ extern inline void linkedlist_finalize(id obj);
 // define creation and destruction
 extern linkedlist linkedlist_create();
 extern linkedlist linkedlist_create_by_comparator(comparator cmp);
-extern linkedlist linkedlist_destroy(id obj);
+extern void linkedlist_destroy(id obj);
 /* Linked List */
 extern void linkedlist_append(id obj, void* data);
 extern void linkedlist_prepend(id obj, void* data);
@@ -89,6 +91,7 @@ extern list_iterator linkedlist_create_list_iterator(id obj, size_t idx);
 extern void* linkedlist_iterator_next(id obj);
 extern void linkedlist_iterator_remove(id obj);
 /* List iterator */
+extern void linkedlist_list_iterator_destroy(id obj);
 extern void linkedlist_list_iterator_add(id obj, void* data);
 extern void linkedlist_list_iterator_set(id obj, void* data);
 extern void* linkedlist_list_iterator_previous(id obj);

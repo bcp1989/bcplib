@@ -50,6 +50,11 @@
 #endif
 
 #define id void*
+#define create(type) (type##_create())
+#define create1(type, arg_name, arg) (type##_create_by_##arg_name(arg))
+#define create2(type, arg_name1, arg1, arg_name2, arg2) \
+        (type##_create_by_##arg_name1##_##arg_name2(arg1, arg2))
+#define destroy(obj) (obj)->destroy((obj))
 #define DEFINE_CLASS(struct_name, class_name) typedef struct struct_name* class_name
 #define safe_cast(type, obj) ((type) _safe_cast(obj))
 
@@ -66,9 +71,10 @@ DEFINE_CLASS(bcplib_object, object);
 
 /* Define function type of 'equals' */
 typedef bool (*object_equals_t)(id, id);
-
+typedef void (*object_destroy_t)(id);
 /* Prototype of class *Object */
-#define object_prototype                     object_equals_t equals
+#define object_prototype                     object_equals_t equals;\
+                                             object_destroy_t destroy
 
 /* C structure for class Object */
 struct bcplib_object {

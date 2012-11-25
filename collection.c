@@ -38,11 +38,11 @@ bool collection_remove(id obj, void* user_data) {
     while (itr->has_next(itr)) {
         if (!c->compare(itr->next(itr), user_data)) {
             itr->remove(itr);
-            c->destroy_iterator(c, itr);
+            destroy(itr);
             return true;
         }
     }
-    c->destroy_iterator(c, itr);
+    destroy(itr);
     return false;
 }
 
@@ -52,11 +52,11 @@ bool collection_contains(id obj, void* user_data) {
     iterator itr = c->create_iterator(c);
     while (itr->has_next(itr)) {
         if (!c->compare(itr->next(itr), user_data)) {
-            c->destroy_iterator(c, itr);
+            destroy(itr);
             return true;
         }
     }
-    c->destroy_iterator(c, itr);
+    destroy(itr);
     return false;
 }
 
@@ -69,7 +69,7 @@ bool collection_add_all(id obj1, id obj2) {
     while (c2itr->has_next(c2itr)) {
         changed = changed || c1->add(c1, c2itr->next(c2itr));
     }
-    c2->destroy_iterator(c2, c2itr);
+    destroy(c2itr);
     return changed;
 }
 
@@ -85,7 +85,7 @@ bool collection_remove_all(id obj1, id obj2) {
             changed = true;
         }
     }
-    c1->destroy_iterator(c1, c1itr);
+    destroy(c1itr);
     return changed;
 }
 
@@ -96,10 +96,10 @@ bool collection_contains_all(id obj1, id obj2) {
     iterator c2itr = c2->create_iterator(c2);
     while (c2itr->has_next(c2itr)) {
         if (!c1->contains(c1, c2itr->next(c2itr))) {
-            c2->destroy_iterator(c2, c2itr);
+           destroy(c2itr);
             return false;
         }
     }
-    c2->destroy_iterator(c2, c2itr);
+    destroy(c2itr);
     return true;
 }

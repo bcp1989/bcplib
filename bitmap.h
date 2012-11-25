@@ -60,7 +60,7 @@ typedef struct bcplib_bitmap {
 }bitmap_t;
 
 extern bitmap bitmap_create(size_t bits_num);
-extern bitmap bitmap_destroy(bitmap b);
+extern void bitmap_destroy(id obj);
 
 #endif	/* BITMAP_H */
 
