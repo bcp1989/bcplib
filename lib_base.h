@@ -28,13 +28,6 @@
  * Lib base contains all base function types and the object that is inherited
  * by nearly all structures in my lib.
  * This module may be separate into different modules if it increases a lot.
- * ChangeList
- * ----------
- * 11/1/2012
- * +
- * 
- * TODO
- * ----
  */
 #ifndef LIB_BASE_H
 #define	LIB_BASE_H
@@ -68,44 +61,36 @@
  */
 typedef int (*comparator)(void*, void*);
 
-/*
- * Description
- * -----------
- * Base class type, most of modules in bcplib is OO, and they all 
- * inherit/extends the base class type.
- * OO in bcplib
- * ------------
- * *inherit* is using a different set of functions.
- * *extends* is using a different structure but put the prototype of its parent
- * class as the first element in its structure.
- * *final class* have no class prototype so that other class cannot inherit or
- * extends it.
- * *Interface* is simple, in bcplib, a macro that defines a collection of 
- * functions/attributes is treated as a interface.  Not like Java, you can't 
- * cast a class into a interface type (cause a class may put the functions 
- * anywhere). It is just a way to let user know what a class can do.
- * *Abstract class* and "Non-abstract class" can be known by their init.
- * function; a class is a abstract class if there is only *X_init*(where X is
- * the class name), and a non-abstract class should define one or more
- * *X_create_Y* functions where Y indicates the specific way to create a class.
- */
+/* Define Root class, Object */
 DEFINE_CLASS(bcplib_object, object);
+
+/* Define function type of 'equals' */
 typedef bool (*object_equals_t)(id, id);
+
+/* Prototype of class *Object */
 #define object_prototype                     object_equals_t equals
 
+/* C structure for class Object */
 struct bcplib_object {
     object_prototype;
 };
 
+/* Initialize and finalize functions for class Object */
 extern inline void object_init(id);
 extern inline void object_finalize(id);
 
+/* Functions of Object */
+extern int object_equals(id this, id that);
+
 /* Utilities */
+/* Saft cast sub-function */
 extern inline id _safe_cast(id obj);
+/* malloc function, bcplib version */
 extern void* bcplib_malloc(size_t size);
 //extern void* bcplib_realloc(void* pointer, size_t new_size);
+/* free function, bcplib version */
 extern void bcplib_free(void* p);
+/* System copy function */
 extern void bcplib_array_copy(void** from, void** to, size_t offset, size_t length);
-// jhkhjjh
 #endif	/* LIB_BASE_H */
 

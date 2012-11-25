@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/arraylist.o \
 	${OBJECTDIR}/iterator.o \
 	${OBJECTDIR}/list_iterator.o \
+	${OBJECTDIR}/linkedlist.o \
 	${OBJECTDIR}/list.o \
 	${OBJECTDIR}/collection.o \
 	${OBJECTDIR}/main.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/list_iterator.o: list_iterator.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/list_iterator.o list_iterator.c
+
+${OBJECTDIR}/linkedlist.o: linkedlist.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/linkedlist.o linkedlist.c
 
 ${OBJECTDIR}/list.o: list.c 
 	${MKDIR} -p ${OBJECTDIR}

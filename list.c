@@ -1,10 +1,5 @@
 #include "list.h"
-static bool list_add(id obj, void* user_data);
-static size_t list_index_of(id, void*);
-static size_t list_last_index_of(id, void*);
-static iterator list_create_iterator(id);
-static iterator list_destory_iterator(id, id);
-static list_iterator list_destory_list_iterator(id, id);
+
 
 inline
 void check_index_range(size_t idx, size_t from, size_t to) {
@@ -19,8 +14,8 @@ void list_init(id obj) {
     l->index_of = list_index_of;
     l->last_index_of = list_last_index_of;
     l->create_iterator = list_create_iterator;
-    l->destory_iterator = list_destory_iterator;
-    l->destory_list_iterator = list_destory_list_iterator;
+    l->destroy_iterator = list_destroy_iterator;
+    l->destroy_list_iterator = list_destroy_list_iterator;
 }
 
 inline
@@ -31,32 +26,26 @@ void list_finalize(id obj) {
 
 /* Default functions */
 
-static
 iterator list_create_iterator(id obj) {
     list l = (list) obj;
     assert(l != NULL);
     return (iterator) l->create_list_iterator(l, 0);
 }
 
-static
-iterator list_destory_iterator(id obj, id itr) {
+iterator list_destroy_iterator(id obj, id itr) {
     list l = (list) obj;
     assert(l != NULL);
     // EXPERIMENT Can I cast a NULL pointer to any type in common compiler?
-    return (iterator) l->destory_list_iterator(l, itr);
+    return (iterator) l->destroy_list_iterator(l, itr);
 }
 
-
-static
-list_iterator list_destory_list_iterator(id obj, id itr) {
-    list_iterator list_itr = (list_iterator) safe_cast(list_iterator, itr);
+list_iterator list_destroy_list_iterator(id obj, id itr) {
+    list_iterator list_itr = safe_cast(list_iterator, itr);
     list_iterator_finalize(list_itr);
     bcplib_free(list_itr);
     return NULL;
 }
 
-
-static
 bool list_add(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
@@ -64,7 +53,6 @@ bool list_add(id obj, void* user_data) {
     return true;
 }
 
-static
 size_t list_index_of(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
@@ -72,15 +60,14 @@ size_t list_index_of(id obj, void* user_data) {
     while (itr->has_next(itr)) {
         if (l->compare(itr->next(itr), user_data) == 0) {
             size_t ret = itr->previous_index(itr);
-            l->destory_list_iterator(l, itr);
+            l->destroy_list_iterator(l, itr);
             return ret;
         }
     }
-    l->destory_list_iterator(l, itr);
+    l->destroy_list_iterator(l, itr);
     return -1;
 }
 
-static
 size_t list_last_index_of(id obj, void* user_data) {
     list l = (list) obj;
     assert(obj != NULL);
@@ -88,10 +75,10 @@ size_t list_last_index_of(id obj, void* user_data) {
     while (itr->has_previous(itr)) {
         if (l->compare(itr->previous(itr), user_data) == 0) {
             size_t ret = itr->next_index(itr);
-            l->destory_list_iterator(l, itr);
+            l->destroy_list_iterator(l, itr);
             return ret;
         }
     }
-    l->destory_list_iterator(l, itr);
+    l->destroy_list_iterator(l, itr);
     return -1;
 }

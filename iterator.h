@@ -31,9 +31,9 @@ DEFINE_CLASS(bcplib_iterator, iterator);
 
 // define iterator interface
 typedef iterator (*iterator_create_iterator_t)(id);
-typedef iterator (*iterator_destory_iterator_t)(id, id);
+typedef iterator (*iterator_destroy_iterator_t)(id, id);
 #define iterable_interface      iterator_create_iterator_t create_iterator;\
-                                iterator_destory_iterator_t destory_iterator
+                                iterator_destroy_iterator_t destroy_iterator
                                 
 // define iterator prototype
 typedef bool (*iterator_has_next_t)(id);
@@ -41,7 +41,7 @@ typedef void* (*iterator_next_t)(id);
 typedef void (*iterator_remove_t)(id);
 #define iterator_prototype      object_prototype;\
                                 id host;\
-                                id client;\
+                                id aux;\
                                 iterator_has_next_t has_next;\
                                 iterator_next_t next;\
                                 iterator_remove_t remove
@@ -51,7 +51,7 @@ typedef struct bcplib_iterator {
 } iterator_t;
 
 
-extern inline void iterator_init(id obj, id host, id first);
+extern inline void iterator_init(id obj, id host, id aux);
 extern inline void iterator_finalize(id obj);
 #endif	/* ITERATOR_H */
 

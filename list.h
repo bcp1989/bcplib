@@ -27,9 +27,9 @@
 #define	LIST_H
 #include "collection.h"
 #include "list_iterator.h"
-
+// define class
 DEFINE_CLASS(bcplib_list, list);
-
+// define function types
 typedef void (*list_add_at_t)(id, size_t, void*);
 typedef void* (*list_get_t)(id, size_t);
 typedef void* (*list_set_t)(id, size_t, void*);
@@ -44,14 +44,21 @@ typedef size_t(*list_last_index_of_t)(id, void*);
                         list_remove_at_t remove_at;\
                         list_index_of_t index_of;\
                         list_last_index_of_t last_index_of
-
+// define structure
 typedef struct bcplib_list {
     list_prototype;
 } list_t;
-
+// define init. finalize functions.
 extern inline void list_init(id obj);
 extern inline void list_finalize(id obj);
 
+/* Functions of list */
+extern bool list_add(id obj, void* user_data);
+extern size_t list_index_of(id, void*);
+extern size_t list_last_index_of(id, void*);
+extern iterator list_create_iterator(id);
+extern iterator list_destroy_iterator(id, id);
+extern list_iterator list_destroy_list_iterator(id, id);
 /* utilities */
 extern inline void check_index_range(size_t idx, size_t from, size_t to);
 #endif	/* LIST_H */

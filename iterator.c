@@ -1,12 +1,12 @@
 #include "iterator.h"
 
 inline
-void iterator_init(id user_obj, id host, id first) {
+void iterator_init(id user_obj, id host, id aux) {
     iterator itr = (iterator) user_obj;
     assert (itr != NULL);
     object_init(itr);
     itr->host = host;
-    itr->client = first;
+    itr->aux = aux;
 }
 
 inline

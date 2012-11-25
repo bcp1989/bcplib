@@ -27,6 +27,7 @@
 #define	ARRAYLIST_H
 #include "lib_base.h"
 #include "list.h"
+
 DEFINE_CLASS(bcplib_arraylist, arraylist);
 // define array prototype
 typedef void (*arraylist_trim_to_size_t)(id);
@@ -37,24 +38,51 @@ typedef void (*arraylist_ensure_capacity_t)(id, size_t);
                                 size_t arraylist_size;\
                                 arraylist_trim_to_size_t trim_to_size;\
                                 arraylist_ensure_capacity_t ensure_capacity
-                                
 
 typedef struct bcplib_arraylist {
     arraylist_prototype;
 } arraylist_t;
 
+// init. and finalize
 extern inline void arrayliast_init(id obj);
 extern inline void arraylist_init_by_size(id obj, size_t size);
 extern inline void arraylist_finalize(id obj);
+// Creation
 extern arraylist arraylist_create();
 extern arraylist arraylist_create_by_size(size_t size);
 extern arraylist arraylist_create_by_comparator(comparator cmp);
-extern arraylist arratlist_create_by_size_comparator(size_t size, comparator cmp);
+extern arraylist arraylist_create_by_size_comparator(size_t size, comparator cmp);
 extern arraylist arraylist_create_by_data(void** init_data, size_t size);
 extern arraylist arraylist_create_by_collection(id obj);
-
+// Destruction functions.
 extern arraylist arraylist_destroy(arraylist obj);
 
-
+/* Functions of arraylist class */
+/* Collection functions */
+extern bool arraylist_remove(id obj, void* user_data);
+extern void arraylist_clear(id obj);
+extern size_t arraylist_size(id obj);
+extern bool arraylist_is_empty(id obj);
+extern bool arraylist_contains(id obj, void* user_data);
+/* List functions */
+extern void arraylist_add_at(id obj, size_t idx, void* user_data);
+extern void* arraylist_get(id obj, size_t idx);
+extern void * arraylist_set(id obj, size_t idx, void* user_data);
+extern void* arraylist_remove_at(id obj, size_t idx);
+extern size_t arraylist_index_of(id obj, void* user_data);
+extern size_t arraylist_last_index_of(id obj, void* user_data);
+/* List iterator interface */
+extern list_iterator arraylist_create_list_iterator(id obj, size_t idx);
+extern list_iterator arraylist_destroy_list_iterator(id obj, id itr);
+/* Array list function */
+extern void arraylis_trim_to_size(id obj);
+extern void arraylist_ensure_capacity(id obj, size_t new_cap);
+/* Iterator functions */
+extern void* arraylist_iterator_next(id obj);
+extern void arraylist_iterator_remove(id obj);
+/* List iterator functions */
+extern void arraylist_list_iterator_add(id obj, void* user_data);
+extern void arraylist_list_iterator_set(id obj, void* user_data);
+extern void* arraylist_list_iterator_previous(id obj);
 #endif	/* ARRAYLIST_H */
 

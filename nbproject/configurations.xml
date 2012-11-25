@@ -9,6 +9,7 @@
       <itemPath>collection.h</itemPath>
       <itemPath>iterator.h</itemPath>
       <itemPath>lib_base.h</itemPath>
+      <itemPath>linkedlist.h</itemPath>
       <itemPath>list.h</itemPath>
       <itemPath>list_iterator.h</itemPath>
     </logicalFolder>
@@ -27,6 +28,7 @@
       <itemPath>collection.c</itemPath>
       <itemPath>iterator.c</itemPath>
       <itemPath>lib_base.c</itemPath>
+      <itemPath>linkedlist.c</itemPath>
       <itemPath>list.c</itemPath>
       <itemPath>list_iterator.c</itemPath>
       <itemPath>main.c</itemPath>

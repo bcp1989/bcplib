@@ -1,9 +1,6 @@
 #include "lib_base.h"
 #include <assert.h>
 
-/* Function Declarations */
-static int object_equals(id this, id that);
-
 /*
  * Init function of abstract class object.
  * Init function never check the parameter, because object is a abstract class
@@ -20,7 +17,6 @@ void object_finalize(id obj) {
     // do nothing currently
 }
 
-static
 int object_equals(id this, id that) {
     return this == that;
 }

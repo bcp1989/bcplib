@@ -1,10 +1,16 @@
 TODO List
 ---------
- 1. document
- 2. Test module
+ 1. document, use doxygen. ||
+ 2. Test framework. ||||
  3. Need to check pointer type inside each function, to make sure the pointers 
-    inherit/*extends* a specific class. Don't know how right now.
- 4. arraylist, linkedlist, set, map, hashmap, hashset, treeset, treemap
+    inherit/*extends* a specific class. Don't know how right now. |
+ 4. arraylist (done), linkedlist (done), set (developing), map, hashmap, hashset, 
+    treeset, treemap. |||
+
+11/24/2012
+----------
++ Add linkedlist.
++ Optimize arraylist_list_iterator.
 
 11/19/2012
 ----------
@@ -14,5 +20,5 @@ TODO List
 
 11/1/2012
 ----------
-+ Add bitmap
-+ Add iterator, collection, lib_base, list
++ Add bitmap.
++ Add iterator, collection, lib_base, list.

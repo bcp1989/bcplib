@@ -1,37 +1,9 @@
 #include "arraylist.h"
 
 #define DEFAULT_SIZE 10
-#define MAX_CAPACITY (((size_t)-1) - 8)
+#define MAX_CAPACITY (((size_t) - 1) - 8)
 
-/* Collection functions */
-static bool arraylist_remove(id obj, void* user_data);
-static void arraylist_clear(id obj);
-static size_t arraylist_size(id obj);
-static bool arraylist_is_empty(id obj);
-static bool arraylist_contains(id obj, void* user_data);
-/* List functions */
-static void arraylist_add_at(id obj, size_t idx, void* user_data);
-static void* arraylist_get(id obj, size_t idx);
-static void * arraylist_set(id obj, size_t idx, void* user_data);
-static void* arraylist_remove_at(id obj, size_t idx);
-static size_t arraylist_index_of(id obj, void* user_data);
-static size_t arraylist_last_index_of(id obj, void* user_data);
-/* List iterator interface */
-static list_iterator arraylist_create_list_iterator(id obj, size_t idx);
-/* Array list function */
-static void arraylis_trim_to_size(id obj);
-static void arraylist_ensure_capacity(id obj, size_t new_cap);
-/* Iterator functions */
-static bool arraylist_iterator_has_next(id obj);
-static void* arraylist_iterator_next(id obj);
-static void arraylist_iterator_remove(id obj);
-/* List iterator functions */
-static void arraylist_list_iterator_add(id obj, void* user_data);
-static void arraylist_list_iterator_set(id obj, void* user_data);
-static bool arraylist_list_iterator_has_previous(id obj);
-static void* arraylist_list_iterator_previous(id obj);
-static size_t arraylist_list_iterator_next_index(id obj);
-static size_t arraylist_list_iterator_previous_index(id obj);
+
 /* Candidate functions */
 static void arraylist_add_all_by_data(id obj, void** user_data, size_t size);
 
@@ -42,7 +14,7 @@ void arraylist_init(id obj) {
 
 inline
 void arraylist_init_by_size(id obj, size_t size) {
-    arraylist al = (arraylist) obj;
+    arraylist al = safe_cast(arraylist, obj);
     assert(size > 0);
     // call super.init
     list_init(al);
@@ -67,12 +39,14 @@ void arraylist_init_by_size(id obj, size_t size) {
     al->ensure_capacity = arraylist_ensure_capacity;
     // init. list iterator interface
     al->create_list_iterator = arraylist_create_list_iterator;
+    al->destroy_list_iterator = arraylist_destroy_list_iterator;
 }
 
 inline
 void arraylist_finalize(id obj) {
     arraylist al = safe_cast(arraylist, obj);
-    collection_finalize(al);
+    // call super.finalize
+    list_finalize(al);
     bcplib_free(al->elements);
     al->elements = NULL;
 }
@@ -82,8 +56,18 @@ arraylist arraylist_create() {
 }
 
 arraylist arraylist_create_by_size(size_t size) {
+    return arraylist_create_by_size_comparator(size, collection_compare);
+}
+
+arraylist arraylist_create_by_comparator(comparator cmp) {
+    return arraylist_create_by_size_comparator(DEFAULT_SIZE, cmp);
+}
+
+arraylist arraylist_create_by_size_comparator(size_t size, comparator cmp) {
+    assert (cmp != NULL);
     arraylist al = (arraylist) bcplib_malloc(sizeof (arraylist_t));
     arraylist_init_by_size(al, size);
+    al->compare = cmp;
     return al;
 }
 
@@ -120,7 +104,6 @@ void arraylist_add_all_by_data(id obj, void** user_data, size_t size) {
 }
 
 /* Collection functions */
-static
 bool arraylist_remove(id obj, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     size_t idx = al->index_of(al, user_data);
@@ -131,7 +114,6 @@ bool arraylist_remove(id obj, void* user_data) {
     return false;
 }
 
-static
 void arraylist_clear(id obj) {
     arraylist al = safe_cast(arraylist, obj);
     size_t i = 0;
@@ -141,26 +123,22 @@ void arraylist_clear(id obj) {
     al->arraylist_size = 0;
 }
 
-static
 size_t arraylist_size(id obj) {
     arraylist al = safe_cast(arraylist, obj);
     return al->arraylist_size;
 }
 
-static
 bool arraylist_is_empty(id obj) {
     arraylist al = safe_cast(arraylist, obj);
     return al->arraylist_size == 0;
 }
 
-static
 bool arraylist_contains(id obj, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     return al->index_of(al, user_data) >= 0;
 }
 
 /* List functions */
-static
 void arraylist_add_at(id obj, size_t idx, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     check_index_range(idx, 0, al->arraylist_size + 1);
@@ -173,14 +151,12 @@ void arraylist_add_at(id obj, size_t idx, void* user_data) {
     ++(al->arraylist_size);
 }
 
-static
 void* arraylist_get(id obj, size_t idx) {
     arraylist al = safe_cast(arraylist, obj);
     check_index_range(idx, 0, al->arraylist_size);
     return al->elements[idx];
 }
 
-static
 void * arraylist_set(id obj, size_t idx, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     check_index_range(idx, 0, al->arraylist_size);
@@ -189,7 +165,6 @@ void * arraylist_set(id obj, size_t idx, void* user_data) {
     return ret;
 }
 
-static
 void* arraylist_remove_at(id obj, size_t idx) {
     arraylist al = safe_cast(arraylist, obj);
     check_index_range(idx, 0, al->arraylist_size);
@@ -202,24 +177,22 @@ void* arraylist_remove_at(id obj, size_t idx) {
     return ret;
 }
 
-static
 size_t arraylist_index_of(id obj, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     size_t i = 0;
     for (i = 0; i < al->arraylist_size; ++i) {
-        if (al->compare(al->elements[i], user_data)) {
+        if (al->compare(al->elements[i], user_data) == 0) {
             return i;
         }
     }
     return -1;
 }
 
-static
 size_t arraylist_last_index_of(id obj, void* user_data) {
     arraylist al = safe_cast(arraylist, obj);
     size_t i = 0;
     for (i = al->arraylist_size - 1; i >= 0; --i) {
-        if (al->compare(al->elements[i], user_data)) {
+        if (al->compare(al->elements[i], user_data) == 0) {
             return i;
         }
     }
@@ -227,30 +200,29 @@ size_t arraylist_last_index_of(id obj, void* user_data) {
 }
 
 /* List iterator interface */
-static
 list_iterator arraylist_create_list_iterator(id obj, size_t idx) {
     arraylist al = safe_cast(arraylist, obj);
-    check_index_range(idx, 0, al->arraylist_size);
+    check_index_range(idx, 0, al->arraylist_size + 1);
     list_iterator itr = (list_iterator) bcplib_malloc(sizeof (list_iterator_t));
-    list_iterator_init(itr, al, al->elements[idx]);
+    list_iterator_init(itr, al, NULL);
     // init iterator functions
-    itr->has_next = arraylist_iterator_has_next;
     itr->next = arraylist_iterator_next;
     itr->remove = arraylist_iterator_remove;
     // init list iterator functions
     itr->add = arraylist_list_iterator_add;
     itr->set = arraylist_list_iterator_set;
-    itr->has_previous = arraylist_list_iterator_has_previous;
     itr->previous = arraylist_list_iterator_previous;
-    itr->next_index = arraylist_list_iterator_next_index;
-    itr->previous_index = arraylist_list_iterator_previous_index;
     itr->cursor = idx;
-    itr->last_cursor = -1;
     return itr;
 }
 
+list_iterator arraylist_destroy_list_iterator(id obj, id itr) {
+    list_iterator list_itr = safe_cast(list_iterator, itr);
+    bcplib_free(list_itr->aux);
+    return list_destroy_list_iterator(obj, itr);
+}
+
 /* Array list function */
-static
 void arraylis_trim_to_size(id obj) {
     arraylist al = safe_cast(arraylist, obj);
     // TODO safe re-alloc!
@@ -263,7 +235,6 @@ void arraylis_trim_to_size(id obj) {
     al->capacity = al->arraylist_size;
 }
 
-static
 void arraylist_ensure_capacity(id obj, size_t new_cap) {
     arraylist al = safe_cast(arraylist, obj);
     assert(new_cap <= MAX_CAPACITY);
@@ -303,84 +274,53 @@ void arraylist_ensure_capacity(id obj, size_t new_cap) {
 }
 
 /* Iterator functions */
-static
-bool arraylist_iterator_has_next(id obj) {
-    list_iterator itr = safe_cast(list_iterator, obj);
-    arraylist al = (arraylist) (itr->host);
 
-    return itr->cursor < al->arraylist_size;
-}
-
-static
 void* arraylist_iterator_next(id obj) {
     list_iterator itr = safe_cast(list_iterator, obj);
     assert(itr->has_next(itr));
-    arraylist al = (arraylist) (itr->host);
-    itr->last_cursor = itr->cursor;
+    arraylist al = safe_cast(arraylist, itr->host);
+    itr->change = 1;
     return al->elements[itr->cursor++];
 }
 
-static
 void arraylist_iterator_remove(id obj) {
     list_iterator itr = safe_cast(list_iterator, obj);
+    assert(itr->change != 0);
     arraylist al = (arraylist) (itr->host);
 
-    // TODO document
-    size_t diff = itr->cursor - itr->last_cursor;
-    assert(diff == 1 || diff == -1);
-    itr->last_cursor += (diff < 0 ? -1 : 0);
-    check_index_range(itr->last_cursor, 0, al->arraylist_size);
-    al->remove_at(al, itr->last_cursor);
-    itr->cursor = itr->last_cursor;
+    if (itr->change > 0) {
+        al->remove_at(al, --itr->cursor);
+    } else {
+        al->remove_at(al, itr->cursor);
+    }
+    itr->change = 0;
 }
 
 /* List iterator functions */
-static
 void arraylist_list_iterator_add(id obj, void* user_data) {
     list_iterator itr = safe_cast(list_iterator, obj);
-    arraylist al = (arraylist) (itr->host);
+    assert (itr->change != 0);
+    arraylist al = safe_cast(arraylist, itr->has_next);
     // TODO document
-    al->add_at(al, itr->cursor, user_data);
-    ++(itr->cursor);
+    al->add_at(al, itr->cursor++, user_data);
+    itr->change = 0;
 }
 
-static
 void arraylist_list_iterator_set(id obj, void* user_data) {
     list_iterator itr = safe_cast(list_iterator, obj);
-    arraylist al = (arraylist) (itr->host);
-    // TODO document
-    size_t diff = itr->cursor - itr->last_cursor;
-    assert(diff == 1 || diff == -1);
-    itr->last_cursor += (diff < 0 ? -1 : 0);
-    check_index_range(itr->last_cursor, 0, al->arraylist_size);
-    al->set(al, itr->last_cursor, user_data);
+    assert (itr->change != 0);
+    arraylist al = safe_cast(arraylist, itr->host);
+    if (itr->change > 0) {
+        al->set(al, itr->cursor - 1, user_data);
+    } else {
+        al->set(al, itr->cursor, user_data);
+    }
 }
 
-static
-bool arraylist_list_iterator_has_previous(id obj) {
-    list_iterator itr = safe_cast(list_iterator, obj);
-    return itr->previous_index(itr) >= 0;
-}
-
-static
 void* arraylist_list_iterator_previous(id obj) {
     list_iterator itr = safe_cast(list_iterator, obj);
     assert(itr->has_previous(itr));
-    arraylist al = (arraylist) (itr->host);
-    itr->last_cursor = itr->cursor;
+    arraylist al = safe_cast(arraylist, itr->host);
+    itr->change = -1;
     return al->elements[--(itr->cursor)];
-}
-
-static
-size_t arraylist_list_iterator_next_index(id obj) {
-    list_iterator itr = safe_cast(list_iterator, obj);
-    assert(itr->has_next(itr));
-    return itr->cursor;
-}
-
-static
-size_t arraylist_list_iterator_previous_index(id obj) {
-    list_iterator itr = safe_cast(list_iterator, obj);
-    assert(itr->has_previous(itr));
-    return itr->cursor - 1;
 }

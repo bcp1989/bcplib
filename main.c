@@ -26,29 +26,40 @@
 #include <stdlib.h>
 #include "bitmap.h"
 #include "arraylist.h"
+#include "linkedlist.h"
 
 /*
  * bcplib
  */
+
+int my_compare(void* data1, void* data2) {
+    assert(data1 != NULL && data2 != NULL);
+    return ((*((int *)data1)) - (*((int *) data2)));
+}
+
 int main(int argc, char** argv) {
     // simple test for bitmap
-    arraylist al = arraylist_create_by_size(1000);
+    //arraylist l = arraylist_create_by_size_comparator(1000, my_compare);
+    linkedlist l = linkedlist_create_by_comparator(my_compare);
     size_t i = 0;
     for (i = 0; i < 10000; ++i) {
         int *tmp = (int *) malloc(sizeof (int));
         *tmp = i;
-        ((collection)al)->add(al, tmp);
+        l->add(l, tmp);
     }
-
-    iterator itr = al->create_iterator(al);
+    int intv = 445;
+    printf("index of 445: %d\n", l->index_of(l, &intv));
+    iterator itr = l->create_iterator(l);
     while (itr->has_next(itr)) {
-        int *tmp = (int *)itr->next(itr);
-        printf ("%d\n", *tmp);
+        int *tmp = (int *) itr->next(itr);
+        //printf("%d\n", *tmp);
         itr->remove(itr);
     }
-    al->destory_iterator(al, itr);
-    printf ("%d %d\n", al->is_empty(al), al->size(al));
-    arraylist_destroy(al);
+    l->destroy_iterator(l, itr);
+    printf("%d %d\n", l->is_empty(l), l->size(l));
+    linkedlist_destroy(l);
+    //arraylist_destroy(l);
+    printf("%d\n", sizeof (linkedlist_t));
     return (EXIT_SUCCESS);
 }
 

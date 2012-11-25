@@ -28,12 +28,6 @@
  * A simple OO implementation of bitmap, can't be extended (but can be 
  * inherited).
  * 
- * ChangeList
- * ----------
- * 11/1/2012
- * + add common function of bitmap, such as set, flip...
- * + change to OO, inherit base class.
- * 
  * TODO
  * ----
  * 1. Add assert test for all function.

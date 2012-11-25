@@ -36,7 +36,12 @@ naive way to simulate *this* reference in Java.
 
 Cast
 ----
-Just like Java
+Just like Java. If class A extends/inherits class B, you can use a instance 
+of A where you need a instance of B. You can directly cast A to B. 
+
+For example, you can have a array of instance of class *collection*, and each 
+instance may be a *arraylist*, *linkedlist* or other class that inherits/extends
+from *collection*. 
 
 OO in bcplib
 ============

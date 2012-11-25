@@ -28,13 +28,6 @@
  * A abstract class that describe the concept collection. Refer to Java
  * Collection and AbstractCollection.
  * 
- * ChangeList
- * ----------
- * 11/1/2012
- * + Class type, class basic functions
- * 
- * TODO
- * ----
  */
 
 #ifndef COLLECTION_H
@@ -72,6 +65,7 @@ typedef bool (*collection_contains_all_t)(id, id);
                                 collection_contains_all_t contains_all
 
 // define core structure
+
 typedef struct bcplib_collection {
     collection_prototype;
 } collection_t;
@@ -79,6 +73,15 @@ typedef struct bcplib_collection {
 // define init. function
 extern inline void collection_init(id);
 extern inline void collection_finalize(id);
+
+/* Function of Collection */
+bool collection_is_empty(id);
+bool collection_add_all(id, id);
+bool collection_remove_all(id, id);
+bool collection_contains_all(id, id);
+bool collection_compare(void*, void*);
+bool collection_remove(id, void*);
+bool collection_contains(id, void*);
 
 #endif	/* COLLECTION_H */
 
