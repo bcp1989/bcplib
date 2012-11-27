@@ -8,15 +8,15 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <title>Bcplib by bcp1989</title>
+    <title>bcplib by bcp1989</title>
   </head>
 
   <body>
 
     <header>
       <div class="container">
-        <h1>Bcplib</h1>
-        <h2>C lib</h2>
+        <h1>bcplib</h1>
+        <h2>OO C library</h2>
 
         <section id="downloads">
           <a href="https://github.com/bcp1989/bcplib/zipball/master" class="btn">Download as .zip</a>
@@ -73,7 +73,13 @@ of A where you need a instance of B. You can directly cast A to B. </p>
 instance may be a <em>arraylist</em>, <em>linkedlist</em> or other class that inherits/extends
 from <em>collection</em>. </p>
 
-<h1>OO in bcplib</h1>
+<h2>Convention</h2>
+
+<ol>
+<li>structure should not have "typedef"</li>
+<li>there should be a _prototype if the class is not final.</li>
+<li>structure name should not be the same with the class name.</li>
+</ol><h1>OO in bcplib</h1>
 
 <p>Like Java, bcplib support concepts of class, single inherit/extends, interface, 
 abstract class, final class. However, some of the concepts are not 100% the same 
@@ -124,7 +130,7 @@ class with some functions defined in <em>arraylist.c</em>.</p>
 
 <h2>Extends</h2>
 
-<p>Extends in bcclib is like Java. Class A extends class B means that A has all
+<p>Extends in bcplib is like Java. Class A extends class B means that A has all
 function declarations and data that B has, and A may has its own functions or 
 data that B does not have. In the prototype of A, the prototype of B should be 
 the first element so that we can cast A to B. However, this trick way is 
