@@ -20,12 +20,14 @@ The interface of bcplib is very simple.
 
 Create && destroy Object
 ------------------------
-If a class is named A, you can use `A_create_xxxx` (xxxx is specific create 
-method that may needs extra arguments) functions to create a instance, you can 
-use `A_destroy` function to destroy a instance.
-For example, `arraylist al = arraylist_create();` will create a array list with
-default capacity. `arraylist al = arraylist_destroy(al);` will destroy it.
-The creation and destruction function are not OO.
+`class_name A = create(class_name);` for "new" a Object and 
+`destory(class_instance);` for "release" a Object.
+
+For constructors with arguments, there are a set of `create` functions named as
+`createN();` where *N* is the number of arguments. Currently, only zero to three
+arguments are supported. For example, 
+`class_name a = create1(class_name, argument1_name, argument1_value);`
+will call the specific initialization function with 1 argument.
 
 Function call
 -------------
@@ -41,13 +43,32 @@ of A where you need a instance of B. You can directly cast A to B.
 
 For example, you can have a array of instance of class *collection*, and each 
 instance may be a *arraylist*, *linkedlist* or other class that inherits/extends
-from *collection*. 
+from *collection*.
 
-Convention
+There are two ways to cast a object from one class to another. You can just type
+either `(class_A_name) class_B_instance_var` or 
+`cast(class_A_name, class_B_instance_var)`
+to cast a instance variable of class B to class A. The different is that the
+later one will do the type check.
+
+Class Type
 ----------
-1. structure should not have "typedef"
-2. there should be a <class_name>_prototype if the class is not final.
-3. structure name should not be the same with the class name.
+Every object has a class type structure to indicate the type of the object.
+To check if a object is exactly the instance of a class, use
+`instanceof`. To check if a object inherits/extends or is a instance of a class,
+use `kindof`.
+
+Conventions for developing bcplib
+---------------------------------
+1. The construction and deconstruction function should be named as
+   `class_name_create();` and `class_name_destroy(id obj);`, for constructors
+   with arguments, the name should be
+   `class_name_create_by_arg1_name_arg2_name(arg1, arg2);`
+2. There should be a class_name_prototype macro used to be inherited. For a 
+   example of the macro, please see \<bcplib/container/arraylist.h\>
+3. Structure name should not be the same with the class name.
+4. Call `DEFINE_CLASS` at header file, and call `INIT_CLASS` in the source file.
+   Please see any class inside bcplib for more detail.
 
 OO in bcplib
 ============

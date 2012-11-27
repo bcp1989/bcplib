@@ -7,6 +7,10 @@ TODO List
  4. arraylist (done), linkedlist (done), set (developing), map, hashmap, hashset, 
     treeset, treemap. |||
 
+11/26/2012
+----------
++ Refactor project structure
+
 11/25/2012
 ----------
 + Add type system
