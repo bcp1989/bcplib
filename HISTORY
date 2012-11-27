@@ -7,6 +7,11 @@ TODO List
  4. arraylist (done), linkedlist (done), set (developing), map, hashmap, hashset, 
     treeset, treemap. |||
 
+11/25/2012
++ Add type system
++ Change each class to fit to the type system
++ Clean the source file structure
+
 11/24/2012
 ----------
 + Add linkedlist.

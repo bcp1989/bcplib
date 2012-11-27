@@ -39,27 +39,40 @@
 #define	BITMAP_H
 #include <stddef.h>
 #include <stdint.h>
-#include "lib_base.h"
+#include "bcplib_base.h"
+#include "object.h"
 
 DEFINE_CLASS(bcplib_bitmap, bitmap);
 
 typedef uint32_t bit_elem;
 
-typedef struct bcplib_bitmap {
-    object_prototype;
-    size_t bit_num;
-    bit_elem *bits;
-    void (*set)(bitmap b, size_t idx);
-    void (*clear)(bitmap b, size_t idx);
-    bool (*test)(bitmap b, size_t idx);
-    void (*flip)(bitmap b, size_t idx);
-    void (*set_multiple)(bitmap b, size_t n, size_t idxs, ...);
-    void (*clear_multiple)(bitmap b, size_t n, size_t idxs, ...);
-    void (*set_all)(bitmap b);
-    void (*clear_all)(bitmap b);
-}bitmap_t;
+typedef void (*bitmap_set_t)(bitmap b, size_t idx);
+typedef void (*bitmap_clear_t)(bitmap b, size_t idx);
+typedef bool (*bitmap_test_t)(bitmap b, size_t idx);
+typedef void (*bitmap_flip_t)(bitmap b, size_t idx);
+typedef void (*bitmap_set_multiple_t)(bitmap b, size_t n, size_t idxs, ...);
+typedef void (*bitmap_clear_multiple_t)(bitmap b, size_t n, size_t idxs, ...);
+typedef void (*bitmap_set_all_t)(bitmap b);
+typedef void (*bitmap_clear_all_t)(bitmap b);
 
-extern bitmap bitmap_create(size_t bits_num);
+#define bitmap_prototype        object_prototype;\
+                                size_t bit_num;\
+                                bit_elem *bits;\
+                                bitmap_set_t set;\
+                                bitmap_clear_t clear;\
+                                bitmap_test_t test;\
+                                bitmap_flip_t flip;\
+                                bitmap_set_multiple_t set_multiple;\
+                                bitmap_clear_multiple_t clear_multiple;\
+                                bitmap_set_all_t set_all;\
+                                bitmap_clear_all_t clear_all
+
+
+struct bcplib_bitmap {
+    bitmap_prototype;
+};
+
+extern bitmap bitmap_create_by_bits_num(size_t bits_num);
 extern void bitmap_destroy(id obj);
 
 #endif	/* BITMAP_H */

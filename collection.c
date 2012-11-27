@@ -1,6 +1,7 @@
 #include "collection.h"
 #include <stdlib.h>
 
+INIT_CLASS(collection, object, TYPE_ABSTRACT_CLASS);
 inline
 void collection_init(id obj) {
     collection c = (collection) obj;

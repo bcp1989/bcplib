@@ -30,7 +30,7 @@
  */
 #ifndef LIST_ITERATOR_H
 #define	LIST_ITERATOR_H
-#include "lib_base.h"
+#include "bcplib_base.h"
 #include "iterator.h"
 // define class
 DEFINE_CLASS(bcplib_list_iterator, list_iterator);
@@ -57,9 +57,9 @@ typedef size_t (*list_iterator_previous_index_t)(id);
                                 list_iterator_previous_index_t previous_index;                                        
 
 // define core structure
-typedef struct bcplib_list_iterator {
+struct bcplib_list_iterator {
     list_iterator_prototype;
-}list_iterator_t;
+};
 // init. and finalize function
 extern inline void list_iterator_init(id obj, id host, id aux);
 extern inline void list_iterator_finalize(id obj);

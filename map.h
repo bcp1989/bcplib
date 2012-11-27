@@ -39,8 +39,8 @@ typedef struct bcplib_map_entry {
 }map_entry_t;
 typedef struct bcplib_map_entry* map_entry;
 // define create/destroy functions of map entry
-map_entry map_entry_create(void* key, void* value);
-void map_entry_destroy(id obj);
+map_entry map_entry_alloc(void* key, void* value);
+void map_entry_free(id obj);
 // define function types
 typedef void (*map_clear_t)(id);
 typedef bool (*map_contains_key_t)(id, void*);
@@ -69,9 +69,9 @@ typedef collection (*map_values_t)(id);
                         map_size_t size;\
                         map_values_t values                                                
 // define c structure
-typedef struct bcplib_map {
+struct bcplib_map {
     map_prototype;
-}map_t;
+};
 // define init, finalize functions
 void map_init(id obj);
 void map_finalize(id obj);

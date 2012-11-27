@@ -27,13 +27,15 @@
 #include "bitmap.h"
 #include "arraylist.h"
 #include "linkedlist.h"
+#include "set.h"
+#include "map.h"
 
 /*
  * bcplib
  */
 
 int my_compare(void* data1, void* data2) {
-    return ((*((int *)data1)) - (*((int *) data2)));
+    return ((*((int *) data1)) - (*((int *) data2)));
 }
 
 int main(int argc, char** argv) {
@@ -55,11 +57,28 @@ int main(int argc, char** argv) {
         //printf("%d\n", *tmp);
         itr->remove(itr);
     }
+    printf("%s\n", CLASS_TYPE_BY_NAME(linkedlist)->name);
     destroy(itr);
     printf("%d %d\n", l->is_empty(l), l->size(l));
     //linkedlist_destroy(l);
     destroy(l);
-    printf("%d\n", sizeof (linkedlist_t));
+    printf("%s %u %s %u %s %u %s %u %s %u %s %u %s %u %s %u\n",
+            CLASS_TYPE_BY_NAME(bitmap)->name,
+            CLASS_TYPE_BY_NAME(bitmap)->size,
+            CLASS_TYPE_BY_NAME(object)->name,
+            CLASS_TYPE_BY_NAME(object)->size,
+            CLASS_TYPE_BY_NAME(collection)->name,
+            CLASS_TYPE_BY_NAME(collection)->size,
+            CLASS_TYPE_BY_NAME(list)->name,
+            CLASS_TYPE_BY_NAME(list)->size,
+            CLASS_TYPE_BY_NAME(set)->name,
+            CLASS_TYPE_BY_NAME(set)->size,
+            CLASS_TYPE_BY_NAME(map)->name,
+            CLASS_TYPE_BY_NAME(map)->size,
+            CLASS_TYPE_BY_NAME(arraylist)->name,
+            CLASS_TYPE_BY_NAME(arraylist)->size,
+            CLASS_TYPE_BY_NAME(linkedlist)->name,
+            CLASS_TYPE_BY_NAME(linkedlist)->size);
     return (EXIT_SUCCESS);
 }
 

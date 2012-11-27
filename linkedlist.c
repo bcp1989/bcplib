@@ -1,11 +1,13 @@
 #include "linkedlist.h"
+
+INIT_CLASS(linkedlist, list, TYPE_NORMAL_CLASS);
+INIT_CLASS(linkedlist_list_iterator, list_iterator, TYPE_NORMAL_CLASS);
 // foreach
 #define LL_FOREACH_FORWARD(elem, ll) \
         for (elem = first_node(ll); elem != NULL; elem = next_node(ll, elem))
 #define LL_FOREACH_BACKWARD(elem, ll) \
         for (elem = last_node(ll); elem != NULL; elem = prev_node(ll, elem))
 // node structure
-
 struct bcplib_linkedlist_node {
     struct bcplib_linkedlist_node* prev;
     struct bcplib_linkedlist_node* next;
@@ -69,7 +71,7 @@ void linkedlist_finalize(id obj) {
 
 linkedlist linkedlist_create_by_comparator(comparator cmp) {
     assert(cmp != NULL);
-    linkedlist ll = (linkedlist) bcplib_malloc(sizeof (linkedlist_t));
+    linkedlist ll = malloc_object(linkedlist);
     linkedlist_init(ll);
     ll->compare = cmp;
     return ll;
@@ -319,7 +321,7 @@ size_t linkedlist_size(id obj) {
 list_iterator linkedlist_create_list_iterator(id obj, size_t idx) {
     linkedlist ll = safe_cast(linkedlist, obj);
     check_index_range(idx, 0, ll->linkedlist_size + 1);
-    list_iterator itr = (list_iterator) bcplib_malloc(sizeof (list_iterator_t));
+    list_iterator itr = malloc_object(linkedlist_list_iterator);
     list_iterator_init(itr, ll,
             idx == ll->linkedlist_size ? ll->head : locate_node(ll, idx));
     // init object
@@ -342,7 +344,7 @@ void* linkedlist_iterator_next(id obj) {
     linkedlist ll = safe_cast(linkedlist, itr->host);
     // test
     assert(itr->aux != NULL);
-    linkedlist_node current_node = safe_cast(linkedlist_node, itr->aux);
+    linkedlist_node current_node = (linkedlist_node)itr->aux;
     itr->aux = current_node->next;
     ++itr->cursor;
     itr->change = 1;
@@ -355,7 +357,7 @@ void linkedlist_iterator_remove(id obj) {
     linkedlist ll = safe_cast(linkedlist, itr->host);
     // test
     assert(itr->aux != NULL);
-    linkedlist_node current_node = safe_cast(linkedlist_node, itr->aux);
+    linkedlist_node current_node = (linkedlist_node)itr->aux;
     if (itr->change > 0) {
         --itr->cursor;
         remove_node(ll, prev_node(ll, current_node));
@@ -377,7 +379,7 @@ void linkedlist_list_iterator_add(id obj, void* data) {
     list_iterator itr = safe_cast(list_iterator, obj);
     assert(itr->change != 0);
     linkedlist ll = safe_cast(linkedlist, itr->host);
-    linkedlist_node current_node = safe_cast(linkedlist_node, itr->aux);
+    linkedlist_node current_node = (linkedlist_node)itr->aux;
     insert_before(ll, current_node, data);
     ++itr->cursor;
     itr->change = 0;
@@ -387,7 +389,7 @@ void linkedlist_list_iterator_set(id obj, void* data) {
     list_iterator itr = safe_cast(list_iterator, obj);
     assert(itr->change != 0);
     linkedlist ll = safe_cast(linkedlist, itr->host);
-    linkedlist_node current_node = safe_cast(linkedlist_node, itr->aux);
+    linkedlist_node current_node = (linkedlist_node)itr->aux;
     linkedlist_node tbs = itr->change > 0 ? prev_node(ll, current_node)
             : current_node;
     tbs->data = data;
@@ -398,7 +400,7 @@ void* linkedlist_list_iterator_previous(id obj) {
     assert(itr->has_previous);
     linkedlist ll = safe_cast(linkedlist, itr->host);
     --itr->cursor;
-    linkedlist_node current_node = safe_cast(linkedlist_node, itr->aux);
+    linkedlist_node current_node = (linkedlist_node)itr->aux;
     current_node = current_node->prev;
     itr->aux = current_node;
     itr->change = -1;

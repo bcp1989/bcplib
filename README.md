@@ -43,6 +43,12 @@ For example, you can have a array of instance of class *collection*, and each
 instance may be a *arraylist*, *linkedlist* or other class that inherits/extends
 from *collection*. 
 
+Convention
+----------
+1. structure should not have "typedef"
+2. there should be a <class_name>_prototype if the class is not final.
+3. structure name should not be the same with the class name.
+
 OO in bcplib
 ============
 Like Java, bcplib support concepts of class, single inherit/extends, interface, 

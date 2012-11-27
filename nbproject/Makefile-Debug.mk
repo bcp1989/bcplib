@@ -37,15 +37,18 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/bitmap.o \
 	${OBJECTDIR}/arraylist.o \
+	${OBJECTDIR}/bcplib_base.o \
 	${OBJECTDIR}/iterator.o \
 	${OBJECTDIR}/list_iterator.o \
 	${OBJECTDIR}/map.o \
 	${OBJECTDIR}/linkedlist.o \
 	${OBJECTDIR}/list.o \
+	${OBJECTDIR}/bcplib_class_type.o \
 	${OBJECTDIR}/collection.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/set.o \
-	${OBJECTDIR}/lib_base.o
+	${OBJECTDIR}/bcplib.o \
+	${OBJECTDIR}/object.o \
+	${OBJECTDIR}/set.o
 
 
 # C Compiler Flags
@@ -82,6 +85,11 @@ ${OBJECTDIR}/arraylist.o: arraylist.c
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/arraylist.o arraylist.c
 
+${OBJECTDIR}/bcplib_base.o: bcplib_base.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/bcplib_base.o bcplib_base.c
+
 ${OBJECTDIR}/iterator.o: iterator.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -107,6 +115,11 @@ ${OBJECTDIR}/list.o: list.c
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/list.o list.c
 
+${OBJECTDIR}/bcplib_class_type.o: bcplib_class_type.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/bcplib_class_type.o bcplib_class_type.c
+
 ${OBJECTDIR}/collection.o: collection.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -117,15 +130,20 @@ ${OBJECTDIR}/main.o: main.c
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
+${OBJECTDIR}/bcplib.o: bcplib.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/bcplib.o bcplib.c
+
+${OBJECTDIR}/object.o: object.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/object.o object.c
+
 ${OBJECTDIR}/set.o: set.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/set.o set.c
-
-${OBJECTDIR}/lib_base.o: lib_base.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -g -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib_base.o lib_base.c
 
 # Subprojects
 .build-subprojects:

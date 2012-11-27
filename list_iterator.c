@@ -1,5 +1,8 @@
 #include "list_iterator.h"
 #include "list.h"
+
+INIT_CLASS(list_iterator, iterator, TYPE_ABSTRACT_CLASS);
+
 inline
 void list_iterator_init(id obj, id host, id aux) {
     list_iterator list_itr = (list_iterator) obj;

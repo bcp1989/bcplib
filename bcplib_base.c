@@ -1,31 +1,12 @@
-#include "lib_base.h"
+#include "bcplib_base.h"
+#include "object.h"
 #include <assert.h>
 
-/*
- * Init function of abstract class object.
- * Init function never check the parameter, because object is a abstract class
- * and 1 class that inherit it have to check the parameter themself.
- */
-inline
-void object_init(id user_obj) {
-    object obj = (object) user_obj;
-    obj->equals = object_equals;
-}
-
-inline
-void object_finalize(id obj) {
-    // do nothing currently
-}
-
-int object_equals(id this, id that) {
-    return this == that;
-}
-
 /* Utilities */
-inline
-id _safe_cast(id obj) {
-    assert(obj != NULL);
-    return obj;
+id _malloc_object(size_t size, class_type type) {
+    id ret = bcplib_malloc(size);
+    ((object)ret)->class_type = type;
+    return ret;
 }
 
 void* bcplib_malloc(size_t size) {

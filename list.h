@@ -45,9 +45,9 @@ typedef size_t(*list_last_index_of_t)(id, void*);
                         list_index_of_t index_of;\
                         list_last_index_of_t last_index_of
 // define structure
-typedef struct bcplib_list {
+struct bcplib_list {
     list_prototype;
-} list_t;
+};
 // define init. finalize functions.
 extern inline void list_init(id obj);
 extern inline void list_finalize(id obj);

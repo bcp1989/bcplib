@@ -25,7 +25,8 @@
 
 #ifndef ITERATOR_H
 #define	ITERATOR_H
-#include "lib_base.h"
+#include "bcplib_base.h"
+#include "object.h"
 
 DEFINE_CLASS(bcplib_iterator, iterator);
 
@@ -44,9 +45,9 @@ typedef void (*iterator_remove_t)(id);
                                 iterator_next_t next;\
                                 iterator_remove_t remove
 
-typedef struct bcplib_iterator {
+struct bcplib_iterator {
     iterator_prototype;
-} iterator_t;
+};
 
 
 extern inline void iterator_init(id obj, id host, id aux);

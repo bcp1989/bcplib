@@ -1,5 +1,5 @@
 /* 
- * File:   lib_base.h
+ * File:   bcplib_base.h
  * Author: Yirui Zhang
  *
  * Created on November 1, 2012, 5:50 PM
@@ -29,68 +29,46 @@
  * by nearly all structures in my lib.
  * This module may be separate into different modules if it increases a lot.
  */
-#ifndef LIB_BASE_H
-#define	LIB_BASE_H
+#ifndef BCPLIB_BASE_H
+#define	BCPLIB_BASE_H
 
 #include <stddef.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "bcplib_class_type.h"
+#include "bcplib_type.h"
 
-#ifndef bool
-#define bool int
-#endif
-
-#ifndef true
-#define true 1
-#endif
-
-#ifndef false
-#define false 0
-#endif
-
-#define id void*
+/* `new` */
 #define create(type) (type##_create())
 #define create1(type, arg_name, arg) (type##_create_by_##arg_name(arg))
 #define create2(type, arg_name1, arg1, arg_name2, arg2) \
         (type##_create_by_##arg_name1##_##arg_name2(arg1, arg2))
+// haven't been tested yet
+#define create3(type, arg_name1, arg1, arg_name2, arg2, arg_name3, arg3) \
+        (type##_create_by_##arg_name1##_##arg_name2##_##arg_name3(arg1, arg2, arg3))
+/* `free` */
 #define destroy(obj) (obj)->destroy((obj))
-#define DEFINE_CLASS(struct_name, class_name) typedef struct struct_name* class_name
-#define safe_cast(type, obj) ((type) _safe_cast(obj))
-
-
-
+/* malloc a object */
+#define malloc_object(class_name) \
+        ((class_name) _malloc_object(sizeof(class_name##_t), \
+                CLASS_TYPE_BY_NAME(class_name)))
 /* 
  * Comparator, it's a function type to let user define a function to compare 
  * its objects.
  */
 typedef int (*comparator)(void*, void*);
 
-/* Define Root class, Object */
-DEFINE_CLASS(bcplib_object, object);
+/*
+ * Hash function for user to compute hash code of its data.
+ */
+typedef size_t (*hasher)(void*);
 
-/* Define function type of 'equals' */
-typedef bool (*object_equals_t)(id, id);
-typedef void (*object_destroy_t)(id);
-/* Prototype of class *Object */
-#define object_prototype                     object_equals_t equals;\
-                                             object_destroy_t destroy
 
-/* C structure for class Object */
-struct bcplib_object {
-    object_prototype;
-};
-
-/* Initialize and finalize functions for class Object */
-extern inline void object_init(id);
-extern inline void object_finalize(id);
-
-/* Functions of Object */
-extern int object_equals(id this, id that);
 
 /* Utilities */
-/* Saft cast sub-function */
-extern inline id _safe_cast(id obj);
+/* malloc object */
+extern id _malloc_object(size_t size, class_type type);
 /* malloc function, bcplib version */
 extern void* bcplib_malloc(size_t size);
 //extern void* bcplib_realloc(void* pointer, size_t new_size);

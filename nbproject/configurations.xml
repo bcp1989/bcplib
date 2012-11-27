@@ -5,14 +5,18 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>arraylist.h</itemPath>
+      <itemPath>bcplib.h</itemPath>
+      <itemPath>bcplib_base.h</itemPath>
+      <itemPath>bcplib_class_type.h</itemPath>
+      <itemPath>bcplib_type.h</itemPath>
       <itemPath>bitmap.h</itemPath>
       <itemPath>collection.h</itemPath>
       <itemPath>iterator.h</itemPath>
-      <itemPath>lib_base.h</itemPath>
       <itemPath>linkedlist.h</itemPath>
       <itemPath>list.h</itemPath>
       <itemPath>list_iterator.h</itemPath>
       <itemPath>map.h</itemPath>
+      <itemPath>object.h</itemPath>
       <itemPath>set.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -26,15 +30,18 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>arraylist.c</itemPath>
+      <itemPath>bcplib.c</itemPath>
+      <itemPath>bcplib_base.c</itemPath>
+      <itemPath>bcplib_class_type.c</itemPath>
       <itemPath>bitmap.c</itemPath>
       <itemPath>collection.c</itemPath>
       <itemPath>iterator.c</itemPath>
-      <itemPath>lib_base.c</itemPath>
       <itemPath>linkedlist.c</itemPath>
       <itemPath>list.c</itemPath>
       <itemPath>list_iterator.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>map.c</itemPath>
+      <itemPath>object.c</itemPath>
       <itemPath>set.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

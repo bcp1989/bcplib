@@ -1,5 +1,7 @@
 #include "arraylist.h"
 
+INIT_CLASS(arraylist, list, TYPE_NORMAL_CLASS);
+INIT_CLASS(arraylist_list_iterator, list_iterator, TYPE_NORMAL_CLASS);
 #define DEFAULT_SIZE 10
 #define MAX_CAPACITY (((size_t) - 1) - 8)
 
@@ -66,7 +68,7 @@ arraylist arraylist_create_by_comparator(comparator cmp) {
 
 arraylist arraylist_create_by_size_comparator(size_t size, comparator cmp) {
     assert (cmp != NULL);
-    arraylist al = (arraylist) bcplib_malloc(sizeof (arraylist_t));
+    arraylist al = malloc_object(arraylist);
     arraylist_init_by_size(al, size);
     al->compare = cmp;
     return al;
@@ -203,7 +205,7 @@ size_t arraylist_last_index_of(id obj, void* user_data) {
 list_iterator arraylist_create_list_iterator(id obj, size_t idx) {
     arraylist al = safe_cast(arraylist, obj);
     check_index_range(idx, 0, al->arraylist_size + 1);
-    list_iterator itr = (list_iterator) bcplib_malloc(sizeof (list_iterator_t));
+    arraylist_list_iterator itr = malloc_object(arraylist_list_iterator);
     list_iterator_init(itr, al, NULL);
     // init object
     itr->destroy = arraylist_list_iterator_destroy;

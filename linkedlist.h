@@ -35,9 +35,7 @@
 
 // define class
 DEFINE_CLASS(bcplib_linkedlist, linkedlist);
-// define node types
-typedef struct bcplib_linkedlist_node linkedlist_node_t;
-typedef linkedlist_node_t* linkedlist_node;
+DEFINE_CLASS(bcplib_list_iterator, linkedlist_list_iterator);
 // define function types
 typedef void (*linkedlist_append_t)(id, void*);
 typedef void (*linkedlist_prepend_t)(id, void*);
@@ -45,6 +43,9 @@ typedef void* (*linkedlist_first_t)(id);
 typedef void* (*linkedlist_last_t)(id);
 typedef void* (*linkedlist_remove_first_t)(id);
 typedef void* (*linkedlist_remove_last_t)(id);
+// define node types
+typedef struct bcplib_linkedlist_node linkedlist_node_t;
+typedef linkedlist_node_t* linkedlist_node;
 // define prototype
 #define linkedlist_prototype    list_prototype;\
                                 size_t linkedlist_size;\
@@ -56,9 +57,9 @@ typedef void* (*linkedlist_remove_last_t)(id);
                                 linkedlist_remove_first_t remove_first;\
                                 linkedlist_remove_last_t remove_last
 // define c structure
-typedef struct bcplib_linkedlist{
+struct bcplib_linkedlist{
     linkedlist_prototype;
-}linkedlist_t;
+};
 // define init. finalize functions
 extern inline void linkedlist_init(id obj);
 extern inline void linkedlist_finalize(id obj);

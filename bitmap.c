@@ -7,6 +7,8 @@
 #include <limits.h>
 #include <stdarg.h>
 
+INIT_CLASS(bitmap, object, TYPE_FINAL_CLASS);
+
 #define SHIFT 5 // according to the type of bit_elem
 #define ELEM_IDX(idx) ((idx) >> SHIFT)
 #define MOD_MASK 0x1f // according to the type of bit_elem
@@ -40,7 +42,7 @@ size_t byte_num(size_t bits_num) {
 }
 
 bitmap bitmap_create(size_t bits_num) {
-    bitmap ret = (bitmap) bcplib_malloc(sizeof (struct bcplib_bitmap));
+    bitmap ret = malloc_object(bitmap);
     // check malloc result
     if (ret == NULL) {
         return NULL;

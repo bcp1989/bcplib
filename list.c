@@ -1,5 +1,6 @@
 #include "list.h"
 
+INIT_CLASS(list, collection, TYPE_ABSTRACT_CLASS);
 
 inline
 void check_index_range(size_t idx, size_t from, size_t to) {

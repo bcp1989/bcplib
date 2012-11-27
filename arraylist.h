@@ -25,10 +25,11 @@
 
 #ifndef ARRAYLIST_H
 #define	ARRAYLIST_H
-#include "lib_base.h"
+#include "bcplib_base.h"
 #include "list.h"
 
 DEFINE_CLASS(bcplib_arraylist, arraylist);
+DEFINE_CLASS(bcplib_list_iterator, arraylist_list_iterator);
 // define array prototype
 typedef void (*arraylist_trim_to_size_t)(id);
 typedef void (*arraylist_ensure_capacity_t)(id, size_t);
@@ -39,9 +40,9 @@ typedef void (*arraylist_ensure_capacity_t)(id, size_t);
                                 arraylist_trim_to_size_t trim_to_size;\
                                 arraylist_ensure_capacity_t ensure_capacity
 
-typedef struct bcplib_arraylist {
+struct bcplib_arraylist {
     arraylist_prototype;
-} arraylist_t;
+};
 
 // init. and finalize
 extern inline void arrayliast_init(id obj);

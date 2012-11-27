@@ -1,5 +1,5 @@
 #include "iterator.h"
-
+INIT_CLASS(iterator, object, TYPE_ABSTRACT_CLASS);
 inline
 void iterator_init(id user_obj, id host, id aux) {
     iterator itr = (iterator) user_obj;

@@ -1,8 +1,8 @@
 /* 
- * File:   Set.h
+ * File:   bcplib_type.h
  * Author: Yirui Zhang
  *
- * Created on November 24, 2012, 5:42 PM
+ * Created on November 26, 2012, 2:47 AM
  * 
  *  bcplib is a object-oriented c library of common data structures and 
  *  algorithms. 
@@ -23,24 +23,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Abstract class Set.
- */
+#ifndef BCPLIB_TYPE_H
+#define	BCPLIB_TYPE_H
 
-#ifndef SET_H
-#define	SET_H
-#include "collection.h"
-// define class
-DEFINE_CLASS(bcplib_set, set);
-// define prototype
-#define set_prototype   collection_prototype
-// define c structure
-struct bcplib_set {
-    set_prototype;
-};
+#ifndef bool
+#define bool int
+#endif
 
-extern void set_init(id obj);
-extern void set_finalize(id obj);
+#ifndef true
+#define true 1
+#endif
 
-#endif	/* SET_H */
+#ifndef false
+#define false 0
+#endif
+
+/* Universal pointer to the object */
+#define id void*
+
+#endif	/* BCPLIB_TYPE_H */
 
