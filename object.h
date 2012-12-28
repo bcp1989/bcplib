@@ -42,34 +42,10 @@ struct bcplib_object {
     object_prototype;
 };
 /* Initialize and finalize functions for class Object */
-extern inline void object_init(id);
+DEFINE_INIT_FUNCTION(object);
 extern inline void object_finalize(id);
 /* Functions of Object */
 extern int object_equals(id this, id that);
 
-/* Part of the type system is in class object */
-/* Check if a object is a instance of the specific class type */
-#define instanceof(obj, class_name) \
-        (_instanceof(obj, CLASS_TYPE_BY_NAME(class_name)))
-/* 
- * Check if a object inherit/extends from the specific class type or is a 
- * instance of the specific class type .
- */
-#define kindof(obj, class_name) \
-        (_kindof(obj, CLASS_TYPE_BY_NAME(class_name)))
-/* Allocate a object instance in memory. */
-#define malloc_object(class_name) \
-        ((class_name) _malloc_object(sizeof(class_name##_t), \
-                CLASS_TYPE_BY_NAME(class_name)))
-/* Cast a id pointer to a specific object pointer, including type check */
-#define cast(type, obj) \
-        ((type) _cast(obj, CLASS_TYPE_BY_NAME(type)))
-/* Get class type by name, end-user version */
-#define class_typeof(type) \
-        (CLASS_TYPE_BY_NAME(type))
-
-extern bool _instanceof(id obj, class_type t);
-extern bool _kindof(id obj, class_type t);
-extern id _cast(id obj, class_type t);
 #endif	/* OBJECT_H */
 

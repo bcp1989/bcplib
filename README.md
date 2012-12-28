@@ -1,3 +1,9 @@
+Pause
+=====
+In order to write bcplib efficiently, I need to write a generator to generate the 
+skeleton of each class in bcplib so that I don't need to revise lots of code
+when I change the architecture.
+
 bcplib
 ======
 bcplib is a object-oriented C library of common data structures and algorithms. 

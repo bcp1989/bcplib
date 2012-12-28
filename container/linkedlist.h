@@ -46,6 +46,12 @@ typedef void* (*linkedlist_remove_last_t)(id);
 // define node types
 typedef struct bcplib_linkedlist_node linkedlist_node_t;
 typedef linkedlist_node_t* linkedlist_node;
+// node structure
+struct bcplib_linkedlist_node {
+    struct bcplib_linkedlist_node* prev;
+    struct bcplib_linkedlist_node* next;
+    void* data;
+};
 // define prototype
 #define linkedlist_prototype    list_prototype;\
                                 size_t linkedlist_size;\
@@ -56,10 +62,11 @@ typedef linkedlist_node_t* linkedlist_node;
                                 linkedlist_last_t last;\
                                 linkedlist_remove_first_t remove_first;\
                                 linkedlist_remove_last_t remove_last
-// define c structure
+// define class structure
 struct bcplib_linkedlist{
     linkedlist_prototype;
 };
+
 // define init. finalize functions
 extern inline void linkedlist_init(id obj);
 extern inline void linkedlist_finalize(id obj);

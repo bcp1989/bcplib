@@ -7,12 +7,7 @@ INIT_CLASS(linkedlist_list_iterator, list_iterator, TYPE_NORMAL_CLASS);
         for (elem = first_node(ll); elem != NULL; elem = next_node(ll, elem))
 #define LL_FOREACH_BACKWARD(elem, ll) \
         for (elem = last_node(ll); elem != NULL; elem = prev_node(ll, elem))
-// node structure
-struct bcplib_linkedlist_node {
-    struct bcplib_linkedlist_node* prev;
-    struct bcplib_linkedlist_node* next;
-    void* data;
-};
+
 // utilities functions
 static inline linkedlist_node new_node(linkedlist_node, linkedlist_node, void*);
 static inline void insert_before(linkedlist, linkedlist_node, void*);

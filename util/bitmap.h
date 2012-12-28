@@ -73,6 +73,7 @@ struct bcplib_bitmap {
     bitmap_prototype;
 };
 
+
 extern bitmap bitmap_create_by_bits_num(size_t bits_num);
 extern void bitmap_destroy(id obj);
 
