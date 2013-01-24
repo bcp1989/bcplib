@@ -35,12 +35,10 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <bcplib/bcplib_base.h>
+#include <bcplib/core/bcplib_base.h>
 #include "iterator.h"
-
-// define class
-DEFINE_CLASS(bcplib_collection, collection);
-
+BEGIN_DEFINE_CLASS(collection)
+#define COLLECTION_INIT_COMPARATOR  1
 // define function types
 typedef bool (*collection_add_t)(id, void*);
 typedef bool (*collection_add_all_t)(id, id);
@@ -65,24 +63,15 @@ typedef bool (*collection_contains_all_t)(id, id);
                                 collection_contains_t contains;\
                                 collection_contains_all_t contains_all
 
-// define core structure
-
-struct bcplib_collection {
-    collection_prototype;
-};
-
-// define init. function
-extern inline void collection_init(id);
-extern inline void collection_finalize(id);
-
 /* Function of Collection */
-bool collection_is_empty(id);
-bool collection_add_all(id, id);
-bool collection_remove_all(id, id);
-bool collection_contains_all(id, id);
-bool collection_compare(void*, void*);
-bool collection_remove(id, void*);
-bool collection_contains(id, void*);
+bool collection_is_empty(id self);
+bool collection_add_all(id self, id other);
+bool collection_remove_all(id self, id other);
+bool collection_contains_all(id self, id other);
+bool collection_compare(void* user_data1, void* user_data2);
+bool collection_remove(id self, void* user_data);
+bool collection_contains(id self, void* user_data);
 
+END_DEFINE_CLASS(collection)
 #endif	/* COLLECTION_H */
 

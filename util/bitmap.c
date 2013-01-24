@@ -7,8 +7,6 @@
 #include <limits.h>
 #include <stdarg.h>
 
-INIT_CLASS(bitmap, object, TYPE_FINAL_CLASS);
-
 #define SHIFT 5 // according to the type of bit_elem
 #define ELEM_IDX(idx) ((idx) >> SHIFT)
 #define MOD_MASK 0x1f // according to the type of bit_elem
@@ -30,44 +28,32 @@ size_t byte_num(size_t bits_num) {
     return sizeof (bit_elem) * elem_num(bits_num);
 }
 
-bitmap bitmap_create(size_t bits_num) {
-    bitmap ret = malloc_object(bitmap);
-    // check malloc result
-    if (ret == NULL) {
-        return NULL;
-    }
+INIT_CLASS(bitmap, object, TYPE_FINAL_CLASS);
+// initializer
+BEGIN_IMPL_INITIALIZER(bitmap)
+init_super(flag);
+size_t bits_num = next_arg(size_t);
+// init data
+size_t bytes = byte_num(bits_num);
+self->bit_num = bits_num;
+self->bits = (bit_elem *) bcplib_malloc(bytes);
+memset(self->bits, 0, bytes);
+// init functions
+self->clear = bitmap_clear;
+self->clear_all = bitmap_clear_all;
+self->clear_multiple = bitmap_clear_multiple;
+self->flip = bitmap_flip;
+self->set = bitmap_set;
+self->set_all = bitmap_set_all;
+self->set_multiple = bitmap_set_multiple;
+self->test = bitmap_test;
+self->size = bitmap_size;
+END_IMPL_INITIALIZER(bitmap)
 
-    size_t bytes = byte_num(bits_num);
-    memset(ret, 0, sizeof (struct bcplib_bitmap));
-    ret->bit_num = bits_num;
-    ret->bits = (bit_elem *) bcplib_malloc(bytes);
-    // check malloc result
-    if (ret->bits == NULL) {
-        bcplib_free(ret);
-        return NULL;
-    }
-
-    memset(ret->bits, 0, bytes);
-    // init functions
-    object_init(ret);
-    ret->destroy = bitmap_destroy;
-    ret->clear = bitmap_clear;
-    ret->clear_all = bitmap_clear_all;
-    ret->clear_multiple = bitmap_clear_multiple;
-    ret->flip = bitmap_flip;
-    ret->set = bitmap_set;
-    ret->set_all = bitmap_set_all;
-    ret->set_multiple = bitmap_set_multiple;
-    ret->test = bitmap_test;
-    ret->size = bitmap_size;
-    return ret;
-}
-
-void bitmap_destroy(id obj) {
-    bitmap b = cast(bitmap, obj);
-    bcplib_free(b->bits);
-    bcplib_free(b);
-}
+// finalizer
+BEGIN_IMPL_FINALIZER(bitmap)
+bcplib_free(self->bits);
+END_IMPL_FINALIZER(bitmap)
 
 size_t bitmap_size(id obj) {
     bitmap b = cast(bitmap, obj);
@@ -131,12 +117,12 @@ void bitmap_clear_multiple(id obj, size_t n, size_t idxs, ...) {
 
 void bitmap_set_all(id obj) {
     bitmap b = cast(bitmap, obj);
-    
+
     memset(b->bits, 1, byte_num(b->bit_num));
 }
 
 void bitmap_clear_all(id obj) {
     bitmap b = cast(bitmap, obj);
-    
+
     memset(b->bits, 0, byte_num(b->bit_num));
 }

@@ -1,7 +1,10 @@
 #include "linkedlist.h"
-
+// init linkedlist class
 INIT_CLASS(linkedlist, list, TYPE_NORMAL_CLASS);
-INIT_CLASS(linkedlist_list_iterator, list_iterator, TYPE_NORMAL_CLASS);
+
+// init linkedlist node class
+INIT_CLASS(linkedlist_node, object, TYPE_NORMAL_CLASS);
+
 // foreach
 #define LL_FOREACH_FORWARD(elem, ll) \
         for (elem = first_node(ll); elem != NULL; elem = next_node(ll, elem))
@@ -21,92 +24,77 @@ static linkedlist_node index_of_node(linkedlist, void*);
 //static linkedlist_node last_index_of_node(linkedlist, void*);
 static linkedlist_node locate_node(linkedlist, size_t);
 
-/* init, finalize, creation, destruction */
-inline
-void linkedlist_init(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
-    // call super.init
-    list_init(ll);
-    // init. linked list functions
-    ll->linkedlist_size = 0;
-    ll->head = new_node(NULL, NULL, NULL);
-    ll->head->prev = ll->head;
-    ll->head->next = ll->head;
-    ll->append = linkedlist_append;
-    ll->prepend = linkedlist_prepend;
-    ll->first = linkedlist_first;
-    ll->last = linkedlist_last;
-    ll->remove_first = linkedlist_remove_first;
-    ll->remove_last = linkedlist_remove_last;
-    // init. list functions
-    ll->add_at = linkedlist_add_at;
-    ll->get = linkedlist_get;
-    ll->set = linkedlist_set;
-    ll->remove_at = linkedlist_remove_at;
-    ll->index_of = linkedlist_index_of;
-    ll->last_index_of = linkedlist_last_index_of;
-    // init. collection functions
-    ll->add = linkedlist_add;
-    ll->remove = linkedlist_remove;
-    ll->clear = linkedlist_clear;
-    ll->size = linkedlist_size;
-    // init. list iterator interface
-    ll->create_list_iterator = linkedlist_create_list_iterator;
-    // init object
-    ll->destroy = linkedlist_destroy;
-}
+/* Initializer and finalizer */
+// Initializer of linkedlist
+BEGIN_IMPL_INITIALIZER(linkedlist)
+init_super(flag);
+// init. linked list functions
+self->linkedlist_size = 0;
+self->head = new(linkedlist_node, INIT_DEFAULT, NULL, NULL, NULL);
+self->head->prev = self->head;
+self->head->next = self->head;
+self->append = linkedlist_append;
+self->prepend = linkedlist_prepend;
+self->first = linkedlist_first;
+self->last = linkedlist_last;
+self->remove_first = linkedlist_remove_first;
+self->remove_last = linkedlist_remove_last;
+// init. list functions
+self->add_at = linkedlist_add_at;
+self->get = linkedlist_get;
+self->set = linkedlist_set;
+self->remove_at = linkedlist_remove_at;
+self->index_of = linkedlist_index_of;
+self->last_index_of = linkedlist_last_index_of;
+// init. collection functions
+self->add = linkedlist_add;
+self->remove = linkedlist_remove;
+self->clear = linkedlist_clear;
+self->size = linkedlist_size;
+// init. list iterator interface
+self->create_list_iterator = linkedlist_create_list_iterator;
+END_IMPL_INITIALIZER(linkedlist)
 
-inline
-void linkedlist_finalize(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
-    // call super.finalize
-    list_finalize(ll);
-    bcplib_free(ll->head);
-}
+// Finalizer of linkedlist
+BEGIN_IMPL_FINALIZER(linkedlist)
+bcplib_free(self->head);
+self->head = NULL;
+END_IMPL_FINALIZER(linkedlist)
 
-linkedlist linkedlist_create_by_comparator(comparator cmp) {
-    assert(cmp != NULL);
-    linkedlist ll = malloc_object(linkedlist);
-    linkedlist_init(ll);
-    ll->compare = cmp;
-    return ll;
-}
+// Initializer of linkedlist node
+BEGIN_IMPL_INITIALIZER(linkedlist_node)
+init_super(flag);
+linkedlist_node prev = next_arg(linkedlist_node);
+linkedlist_node next = next_arg(linkedlist_node);
+void* data = next_arg(void*);
+self->data = data;
+self->prev = prev;
+self->next = next;
+if (prev != NULL)
+    prev->next = self;
+if (next != NULL)
+    next->prev = self;
 
-linkedlist linkedlist_create() {
-    return linkedlist_create_by_comparator(collection_compare);
-}
+END_IMPL_INITIALIZER(linkedlist_node)
 
-void linkedlist_destroy(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
-    linkedlist_finalize(ll);
-    bcplib_free(ll);
-}
+// Finalizer of linkedlist node
+BEGIN_IMPL_FINALIZER(linkedlist_node)
+// do nothing
+END_IMPL_FINALIZER(linkedlist_node)
+
+// Finalizer of linkedlist node
+
 
 /* Utilities */
 static inline
-linkedlist_node new_node(linkedlist_node prev, linkedlist_node next, void* data) {
-    linkedlist_node node = (linkedlist_node) bcplib_malloc(
-            sizeof (linkedlist_node_t));
-    assert (node != NULL);
-    node->data = data;
-    node->prev = prev;
-    node->next = next;
-    if (prev != NULL)
-        prev->next = node;
-    if (next != NULL)
-        next->prev = node;
-    return node;
-}
-
-static inline
 void insert_before(linkedlist ll, linkedlist_node org, void* data) {
-    new_node(org->prev, org, data);
+    new(linkedlist_node, INIT_DEFAULT, org->prev, org, data);
     ++ll->linkedlist_size;
 }
 
 static inline
 void insert_after(linkedlist ll, linkedlist_node org, void* data) {
-    new_node(org, org->next, data);
+    new(linkedlist_node, INIT_DEFAULT, org, org->next, data);
     ++ll->linkedlist_size;
 }
 
@@ -134,7 +122,7 @@ static inline
 void remove_node(linkedlist ll, linkedlist_node node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
-    bcplib_free(node);
+    destroy(node);
     --ll->linkedlist_size;
 }
 
@@ -179,32 +167,32 @@ linkedlist_node locate_node(linkedlist ll, size_t idx) {
 }
 
 /* Linked List */
-void linkedlist_append(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+void linkedlist_append(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     insert_before(ll, ll->head, data);
 }
 
-void linkedlist_prepend(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+void linkedlist_prepend(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     insert_after(ll, ll->head, data);
 }
 
-void* linkedlist_first(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_first(id self) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = next_node(ll, ll->head);
     assert(node != NULL);
     return node->data;
 }
 
-void* linkedlist_last(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_last(id self) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = prev_node(ll, ll->head);
     assert(node != NULL);
     return node->data;
 }
 
-void* linkedlist_remove_first(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_remove_first(id self) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = next_node(ll, ll->head);
     assert(node != NULL);
     void* data = node->data;
@@ -212,8 +200,8 @@ void* linkedlist_remove_first(id obj) {
     return data;
 }
 
-void* linkedlist_remove_last(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_remove_last(id self) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = prev_node(ll, ll->head);
     assert(node != NULL);
     void* data = node->data;
@@ -222,8 +210,8 @@ void* linkedlist_remove_last(id obj) {
 }
 
 /* List */
-void linkedlist_add_at(id obj, size_t idx, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+void linkedlist_add_at(id self, size_t idx, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     if (idx == 0) {
         ll->prepend(ll, data);
     } else if (idx == ll->size(ll)) {
@@ -233,29 +221,29 @@ void linkedlist_add_at(id obj, size_t idx, void* data) {
     }
 }
 
-void* linkedlist_get(id obj, size_t idx) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_get(id self, size_t idx) {
+    linkedlist ll = cast(linkedlist, self);
     return locate_node(ll, idx)->data;
 }
 
-void* linkedlist_set(id obj, size_t idx, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_set(id self, size_t idx, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = locate_node(ll, idx);
     void* old_data = node->data;
     node->data = data;
     return old_data;
 }
 
-void* linkedlist_remove_at(id obj, size_t idx) {
-    linkedlist ll = cast(linkedlist, obj);
+void* linkedlist_remove_at(id self, size_t idx) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = locate_node(ll, idx);
     void* old_data = node->data;
     remove_node(ll, node);
     return old_data;
 }
 
-size_t linkedlist_index_of(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+size_t linkedlist_index_of(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = NULL;
     size_t count = 0;
     void* tmp = NULL;
@@ -270,8 +258,8 @@ size_t linkedlist_index_of(id obj, void* data) {
     return -1;
 }
 
-size_t linkedlist_last_index_of(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+size_t linkedlist_last_index_of(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = NULL;
     size_t count = ll->size(ll) - 1;
     void* tmp = NULL;
@@ -287,72 +275,78 @@ size_t linkedlist_last_index_of(id obj, void* data) {
 }
 
 /* Collection */
-bool linkedlist_add(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+bool linkedlist_add(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     ll->append(ll, data);
     return true;
 }
 
-bool linkedlist_remove(id obj, void* data) {
-    linkedlist ll = cast(linkedlist, obj);
+bool linkedlist_remove(id self, void* data) {
+    linkedlist ll = cast(linkedlist, self);
     linkedlist_node node = index_of_node(ll, data);
     if (node == NULL) return false;
     remove_node(ll, node);
     return true;
 }
 
-void linkedlist_clear(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+void linkedlist_clear(id self) {
+    linkedlist ll = cast(linkedlist, self);
     while (ll->linkedlist_size != 0) {
         remove_node(ll, next_node(ll, ll->head));
     }
 }
 
-size_t linkedlist_size(id obj) {
-    linkedlist ll = cast(linkedlist, obj);
+size_t linkedlist_size(id self) {
+    linkedlist ll = cast(linkedlist, self);
     return ll->linkedlist_size;
 }
 
 /* List iterator interface */
-list_iterator linkedlist_create_list_iterator(id obj, size_t idx) {
-    linkedlist ll = cast(linkedlist, obj);
+INIT_CLASS(linkedlist_iterator, list_iterator, TYPE_NORMAL_CLASS);
+BEGIN_IMPL_INITIALIZER(linkedlist_iterator)
+init_super(flag);
+// init list iterator functions
+self->add = linkedlist_list_iterator_add;
+self->set = linkedlist_list_iterator_set;
+self->previous = linkedlist_list_iterator_previous;
+self->cursor = next_arg(size_t);
+// init iterator functions
+self->next = linkedlist_iterator_next;
+self->remove = linkedlist_iterator_remove;
+
+END_IMPL_INITIALIZER(linkedlist_iterator)
+
+BEGIN_IMPL_FINALIZER(linkedlist_iterator)
+// do nothing
+END_IMPL_FINALIZER(linkedlist_iterator)
+list_iterator linkedlist_create_list_iterator(id self, size_t idx) {
+    linkedlist ll = cast(linkedlist, self);
     check_index_range(idx, 0, ll->linkedlist_size + 1);
-    list_iterator itr = malloc_object(linkedlist_list_iterator);
-    list_iterator_init(itr, ll,
-            idx == ll->linkedlist_size ? ll->head : locate_node(ll, idx));
-    // init object
-    itr->destroy = linkedlist_list_iterator_destroy;
-    // init list iterator functions
-    itr->add = linkedlist_list_iterator_add;
-    itr->set = linkedlist_list_iterator_set;
-    itr->previous = linkedlist_list_iterator_previous;
-    itr->cursor = idx;
-    // init iterator functions
-    itr->next = linkedlist_iterator_next;
-    itr->remove = linkedlist_iterator_remove;
+    list_iterator itr = new(list_iterator, INIT_DEFAULT, ll,
+            idx == ll->linkedlist_size ? ll->head : locate_node(ll, idx), idx);
     return itr;
 }
 
 /* Iterator functions */
-void* linkedlist_iterator_next(id obj) {
-    list_iterator itr = cast(list_iterator, obj);
+void* linkedlist_iterator_next(id self) {
+    list_iterator itr = cast(list_iterator, self);
     assert(itr->has_next(itr));
     // test
     assert(itr->aux != NULL);
-    linkedlist_node current_node = (linkedlist_node)itr->aux;
+    linkedlist_node current_node = (linkedlist_node) itr->aux;
     itr->aux = current_node->next;
     ++itr->cursor;
     itr->change = 1;
     return current_node->data;
 }
 
-void linkedlist_iterator_remove(id obj) {
-    list_iterator itr = cast(list_iterator, obj);
+void linkedlist_iterator_remove(id self) {
+    list_iterator itr = cast(list_iterator, self);
     assert(itr->change != 0);
     linkedlist ll = cast(linkedlist, itr->host);
     // test
     assert(itr->aux != NULL);
-    linkedlist_node current_node = (linkedlist_node)itr->aux;
+    linkedlist_node current_node = (linkedlist_node) itr->aux;
     if (itr->change > 0) {
         --itr->cursor;
         remove_node(ll, prev_node(ll, current_node));
@@ -365,36 +359,32 @@ void linkedlist_iterator_remove(id obj) {
 }
 
 /* List iterator */
-void linkedlist_list_iterator_destroy(id obj) {
-    list_iterator itr = cast(list_iterator, obj);
-    bcplib_free(itr);
-}
 
-void linkedlist_list_iterator_add(id obj, void* data) {
-    list_iterator itr = cast(list_iterator, obj);
+void linkedlist_list_iterator_add(id self, void* data) {
+    list_iterator itr = cast(list_iterator, self);
     assert(itr->change != 0);
     linkedlist ll = cast(linkedlist, itr->host);
-    linkedlist_node current_node = (linkedlist_node)itr->aux;
+    linkedlist_node current_node = (linkedlist_node) itr->aux;
     insert_before(ll, current_node, data);
     ++itr->cursor;
     itr->change = 0;
 }
 
-void linkedlist_list_iterator_set(id obj, void* data) {
-    list_iterator itr = cast(list_iterator, obj);
+void linkedlist_list_iterator_set(id self, void* data) {
+    list_iterator itr = cast(list_iterator, self);
     assert(itr->change != 0);
     linkedlist ll = cast(linkedlist, itr->host);
-    linkedlist_node current_node = (linkedlist_node)itr->aux;
+    linkedlist_node current_node = (linkedlist_node) itr->aux;
     linkedlist_node tbs = itr->change > 0 ? prev_node(ll, current_node)
             : current_node;
     tbs->data = data;
 }
 
-void* linkedlist_list_iterator_previous(id obj) {
-    list_iterator itr = cast(list_iterator, obj);
+void* linkedlist_list_iterator_previous(id self) {
+    list_iterator itr = cast(list_iterator, self);
     assert(itr->has_previous);
     --itr->cursor;
-    linkedlist_node current_node = (linkedlist_node)itr->aux;
+    linkedlist_node current_node = (linkedlist_node) itr->aux;
     current_node = current_node->prev;
     itr->aux = current_node;
     itr->change = -1;

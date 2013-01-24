@@ -1,27 +1,25 @@
 #include "list.h"
 
-INIT_CLASS(list, collection, TYPE_ABSTRACT_CLASS);
-
 inline
 void check_index_range(size_t idx, size_t from, size_t to) {
     assert(idx < to && idx >= from);
 }
 
-inline
-void list_init(id obj) {
-    list l = (list) obj;
-    collection_init(l);
-    l->add = list_add;
-    l->index_of = list_index_of;
-    l->last_index_of = list_last_index_of;
-    l->create_iterator = list_create_iterator;
-}
+INIT_CLASS(list, collection, TYPE_ABSTRACT_CLASS);
+// initializer
+BEGIN_IMPL_INITIALIZER(list)
+init_super(flag);
+self->add = list_add;
+self->index_of = list_index_of;
+self->last_index_of = list_last_index_of;
+self->create_iterator = list_create_iterator;
 
-inline
-void list_finalize(id obj) {
-    collection_finalize(obj);
-    // nothing to finalize
-}
+END_IMPL_INITIALIZER(list)
+
+// finalizer
+BEGIN_IMPL_FINALIZER(list)
+// do nothing
+END_IMPL_FINALIZER(list)
 
 /* Default functions */
 iterator list_create_iterator(id obj) {

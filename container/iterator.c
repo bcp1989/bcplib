@@ -1,16 +1,12 @@
 #include "iterator.h"
 INIT_CLASS(iterator, object, TYPE_ABSTRACT_CLASS);
-inline
-void iterator_init(id user_obj, id host, id aux) {
-    iterator itr = (iterator) user_obj;
-    assert (itr != NULL);
-    object_init(itr);
-    itr->host = host;
-    itr->aux = aux;
-}
 
-inline
-void iterator_finalize(id obj) {
-    object_finalize(obj);
-    // nothing to inalize
-}
+BEGIN_IMPL_INITIALIZER(iterator)
+init_super(flag);
+self->host = next_arg(id);
+self->aux = next_arg(id);
+END_IMPL_INITIALIZER(iterator)
+
+BEGIN_IMPL_FINALIZER(iterator)
+// do nothing
+END_IMPL_FINALIZER(iterator)

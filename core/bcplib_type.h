@@ -38,8 +38,12 @@
 #define false 0
 #endif
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 /* Universal pointer to the object */
-#define id void*
+typedef void* id;
 
 #endif	/* BCPLIB_TYPE_H */
 

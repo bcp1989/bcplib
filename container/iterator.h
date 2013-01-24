@@ -25,19 +25,14 @@
 
 #ifndef ITERATOR_H
 #define	ITERATOR_H
-#include <bcplib/bcplib_base.h>
-#include <bcplib/object.h>
-
-DEFINE_CLASS(bcplib_iterator, iterator);
-
-// define iterator interface
-typedef iterator (*iterator_create_iterator_t)(id);
-#define iterable_interface      iterator_create_iterator_t create_iterator
-                                
+#include <bcplib/core/bcplib_base.h>
+#include <bcplib/core/object.h>
+BEGIN_DEFINE_CLASS(iterator)
 // define iterator prototype
 typedef bool (*iterator_has_next_t)(id);
 typedef void* (*iterator_next_t)(id);
 typedef void (*iterator_remove_t)(id);
+
 #define iterator_prototype      object_prototype;\
                                 id host;\
                                 id aux;\
@@ -45,12 +40,9 @@ typedef void (*iterator_remove_t)(id);
                                 iterator_next_t next;\
                                 iterator_remove_t remove
 
-struct bcplib_iterator {
-    iterator_prototype;
-};
-
-
-extern inline void iterator_init(id obj, id host, id aux);
-extern inline void iterator_finalize(id obj);
+// define iterator interface
+typedef iterator (*iterator_create_iterator_t)(id);
+#define iterable_interface      iterator_create_iterator_t create_iterator                               
+END_DEFINE_CLASS(iterator)
 #endif	/* ITERATOR_H */
 

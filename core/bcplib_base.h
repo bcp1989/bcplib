@@ -36,40 +36,55 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "bcplib_class_type.h"
+#include "bcplib_class.h"
 #include "bcplib_type.h"
 
 /* `new` */
-#define create(type) (type##_create())
-#define create1(type, arg_name, arg) (type##_create_by_##arg_name(arg))
-#define create2(type, arg_name1, arg1, arg_name2, arg2) \
-        (type##_create_by_##arg_name1##_##arg_name2(arg1, arg2))
-// haven't been tested yet
-#define create3(type, arg_name1, arg1, arg_name2, arg2, arg_name3, arg3) \
-        (type##_create_by_##arg_name1##_##arg_name2##_##arg_name3(arg1, arg2, arg3))
-/* `free` */
-#define destroy(obj) (obj)->destroy((obj))
+#define new(type, flag, ...) \
+        (_new(class_by_name(type), flag,##__VA_ARGS__))
+
+#define destroy(obj) \
+        (_destroy(obj))
+
 /* 
  * Comparator, it's a function type to let user define a function to compare 
  * its objects.
  */
 typedef int (*comparator)(void*, void*);
 
-/*
- * Hash function for user to compute hash code of its data.
- */
+/* Hash function for user to compute hash code of its data. */
 typedef size_t (*hasher)(void*);
 
+/* 'new' function */
+extern id _new(class type, init_flag flag, ...);
 
+/* 'destory' function */
+extern void _destroy(id obj);
 
-/* Utilities */
-/* malloc object */
-extern id _malloc_object(size_t size, class_type type);
-/* malloc function, bcplib version */
+/* Initialize a object instance. */
+extern void _initialize(id obj, class class, init_flag flag, va_list args);
+
+/* Finalize a object instance. */
+extern void _finalize(id obj);
+
+/*----- Utilities -----*/
+/* Allocate a object instance in memory. */
+#define malloc_object(class_name) \
+        ((class_name) _malloc_object(class_by_name(class_name)))
+
+/* Test a bit */
+#define bit_test(flag, bit) \
+        (((flag) & (bit)) == bit)
+
+/* Malloc object */
+extern id _malloc_object(class type);
+
+/* Malloc function, bcplib version */
 extern void* bcplib_malloc(size_t size);
-//extern void* bcplib_realloc(void* pointer, size_t new_size);
-/* free function, bcplib version */
+
+/* Free function, bcplib version */
 extern void bcplib_free(void* p);
+
 /* System copy function */
 extern void bcplib_array_copy(void** from, void** to, size_t offset, size_t length);
 #endif	/* LIB_BASE_H */

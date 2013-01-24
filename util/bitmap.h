@@ -39,13 +39,12 @@
 #define	BITMAP_H
 #include <stddef.h>
 #include <stdint.h>
-#include <bcplib/bcplib_base.h>
-#include <bcplib/object.h>
-
-DEFINE_CLASS(bcplib_bitmap, bitmap);
-
+#include <bcplib/core/bcplib_base.h>
+#include <bcplib/core/object.h>
+BEGIN_DEFINE_CLASS(bitmap)
+// define element type
 typedef uint32_t bit_elem;
-
+// define function type
 typedef void (*bitmap_set_t)(id, size_t);
 typedef void (*bitmap_clear_t)(id, size_t);
 typedef bool (*bitmap_test_t)(id, size_t);
@@ -55,8 +54,8 @@ typedef void (*bitmap_clear_multiple_t)(id, size_t, size_t, ...);
 typedef void (*bitmap_set_all_t)(id);
 typedef void (*bitmap_clear_all_t)(id);
 typedef size_t (*bitmap_size_t)(id);
-
-#define bitmap_prototype        object_prototype;\
+// define bitmap prototype
+#define bitmap_prototype        extends(object);\
                                 size_t bit_num;\
                                 bit_elem *bits;\
                                 bitmap_set_t set;\
@@ -69,13 +68,6 @@ typedef size_t (*bitmap_size_t)(id);
                                 bitmap_clear_all_t clear_all;\
                                 bitmap_size_t size
 
-struct bcplib_bitmap {
-    bitmap_prototype;
-};
-
-
-extern bitmap bitmap_create_by_bits_num(size_t bits_num);
-extern void bitmap_destroy(id obj);
 
 /* Functions */
 size_t bitmap_size(id obj);
@@ -89,5 +81,6 @@ void bitmap_set_all(id obj);
 void bitmap_clear_all(id obj);
 size_t bitmap_size(id obj);
 
+END_DEFINE_CLASS(bitmap)
 #endif	/* BITMAP_H */
 

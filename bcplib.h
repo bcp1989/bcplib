@@ -26,7 +26,7 @@
 #ifndef BCPLIB_H
 #define	BCPLIB_H
 
-#include <bcplib/object.h>
+#include <bcplib/core/object.h>
 #include <bcplib/container/set.h>
 #include <bcplib/container/map.h>
 

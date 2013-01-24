@@ -26,26 +26,17 @@
 #ifndef OBJECT_H
 #define	OBJECT_H
 #include "bcplib_base.h"
-
-/* Define Root class, Object */
-DEFINE_CLASS(bcplib_object, object);
-
+BEGIN_DEFINE_CLASS(object)
+#define INIT_DEFAULT    0
 /* Define function type of 'equals' */
 typedef bool (*object_equals_t)(id, id);
-typedef void (*object_destroy_t)(id);
 /* Prototype of class *Object */
-#define object_prototype                     class_type class_type;\
+#define object_prototype                     int32_t magic_number;\
+                                             class class;\
                                              object_equals_t equals;\
-                                             object_destroy_t destroy
-/* C structure for class Object */
-struct bcplib_object {
-    object_prototype;
-};
-/* Initialize and finalize functions for class Object */
-DEFINE_INIT_FUNCTION(object);
-extern inline void object_finalize(id);
 /* Functions of Object */
-extern int object_equals(id this, id that);
+extern int object_equals(id self, id that);
 
+END_DEFINE_CLASS(object)
 #endif	/* OBJECT_H */
 

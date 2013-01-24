@@ -1,9 +1,3 @@
-Pause
-=====
-In order to write bcplib efficiently, I need to write a generator to generate the 
-skeleton of each class in bcplib so that I don't need to revise lots of code
-when I change the architecture.
-
 bcplib
 ======
 bcplib is a object-oriented C library of common data structures and algorithms. 
@@ -13,9 +7,10 @@ a very limit subset of bcplib to run a specific module. The development of
 bcplib is motivated by Java SDK. If you are familiar with Java, you can use
 bcplib in a way that you use Java.
 
-Currently, bcplib is developed and tested in gcc 4. When using bcplib, you need
-to make sure the structure alignment strategy in specific Compiler won't 
-influence the function of bcplib.
+Currently, bcplib is developed and tested in GCC 4 and C99 (well...currently I 
+only use variadic macros) standard. When using bcplib, you need to make sure the 
+structure alignment strategy in specific Compiler won't influence the function 
+of bcplib.
 
 Be ware of the number of objects you created. Object in bcplib is space
 consuming, in a 32-bit architecture, a *arraylist* object takes up to 104 bytes.

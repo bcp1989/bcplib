@@ -30,14 +30,9 @@
  */
 #ifndef LIST_ITERATOR_H
 #define	LIST_ITERATOR_H
-#include <bcplib/bcplib_base.h>
+#include <bcplib/core/bcplib_base.h>
 #include "iterator.h"
-// define class
-DEFINE_CLASS(bcplib_list_iterator, list_iterator);
-// define list iterator interface
-typedef list_iterator (*list_iterator_create_list_iterator_t)(id, size_t);
-#define list_iterator_interface \
-        list_iterator_create_list_iterator_t create_list_iterator
+BEGIN_DEFINE_CLASS(list_iterator)
 // define list iterator prototype
 typedef void (*list_iterator_add_t)(id, void*);
 typedef void (*list_iterator_set_t)(id, void*);
@@ -54,20 +49,19 @@ typedef size_t (*list_iterator_previous_index_t)(id);
                                 list_iterator_has_previous_t has_previous;\
                                 list_iterator_previous_t previous;\
                                 list_iterator_next_index_t next_index;\
-                                list_iterator_previous_index_t previous_index;                                        
+                                list_iterator_previous_index_t previous_index
 
-// define core structure
-struct bcplib_list_iterator {
-    list_iterator_prototype;
-};
-// init. and finalize function
-extern inline void list_iterator_init(id obj, id host, id aux);
-extern inline void list_iterator_finalize(id obj);
+// define list iterator interface
+typedef list_iterator (*list_iterable_create_list_iterator_t)(id, size_t);
+#define list_iterable_interface \
+        list_iterable_create_list_iterator_t create_list_iterator
+                                      
 /* Iterator */
-extern bool list_iterator_has_next(id obj) ;
+extern bool list_iterator_has_next(id self) ;
 /* List iterator */
-extern bool list_iterator_has_previous(id obj);
-extern size_t list_iterator_next_index(id obj);
-extern size_t list_iterator_previous_index(id obj);
+extern bool list_iterator_has_previous(id self);
+extern size_t list_iterator_next_index(id self);
+extern size_t list_iterator_previous_index(id self);
+END_DEFINE_CLASS(list_iterator)
 #endif	/* LIST_ITERATOR_H */
 

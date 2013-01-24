@@ -2,10 +2,11 @@
 
 INIT_CLASS(set, collection, TYPE_ABSTRACT_CLASS);
 
-extern void set_init(id obj) {
-    collection_init(obj);
-}
-
-extern void set_finalize(id obj) {
-    collection_finalize(obj);
-}
+BEGIN_IMPL_INITIALIZER(set)
+init_super(flag);
+// do nothing
+END_IMPL_INITIALIZER(set)
+        
+BEGIN_IMPL_FINALIZER(set)
+// do nothing
+END_IMPL_FINALIZER(set)

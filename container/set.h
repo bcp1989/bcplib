@@ -30,17 +30,9 @@
 #ifndef SET_H
 #define	SET_H
 #include "collection.h"
-// define class
-DEFINE_CLASS(bcplib_set, set);
+BEGIN_DEFINE_CLASS(set)
 // define prototype
 #define set_prototype   collection_prototype
-// define c structure
-struct bcplib_set {
-    set_prototype;
-};
-
-extern void set_init(id obj);
-extern void set_finalize(id obj);
-
+END_DEFINE_CLASS(set)
 #endif	/* SET_H */
 

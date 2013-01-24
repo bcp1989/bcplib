@@ -30,17 +30,14 @@
 #ifndef MAP_H
 #define	MAP_H
 #include "set.h"
-// define class
-DEFINE_CLASS(bcplib_map, map);
-// define entry structure
-typedef struct bcplib_map_entry {
-    void* key;
-    void* value;
-}map_entry_t;
-typedef struct bcplib_map_entry* map_entry;
-// define create/destroy functions of map entry
-map_entry map_entry_alloc(void* key, void* value);
-void map_entry_free(id obj);
+// Begin of class map entry
+BEGIN_DEFINE_CLASS(map_entry)
+// define map entry prototype
+#define map_entry_prototype     void* key;\
+                                void* value
+END_DEFINE_CLASS(map_entry)
+// Begin of class map       
+BEGIN_DEFINE_CLASS(map)
 // define function types
 typedef void (*map_clear_t)(id);
 typedef bool (*map_contains_key_t)(id, void*);
@@ -50,12 +47,12 @@ typedef void* (*map_get_t)(id, void*);
 typedef bool (*map_is_empty_t)(id);
 typedef set (*map_key_set_t)(id);
 typedef void* (*map_put_t)(id, void*, void*);
-typedef void (*map_put_all_t)(id, map);
+typedef void (*map_put_all_t)(id, id);
 typedef void* (*map_remove_t)(id, void*);
 typedef size_t (*map_size_t)(id);
 typedef collection (*map_values_t)(id);
 // define prototype
-#define map_prototype   object_prototype;\
+#define map_prototype   extends(object);\
                         map_clear_t clear;\
                         map_contains_key_t contains_key;\
                         map_contains_value_t contains_value;\
@@ -67,13 +64,7 @@ typedef collection (*map_values_t)(id);
                         map_put_all_t put_all;\
                         map_remove_t remove;\
                         map_size_t size;\
-                        map_values_t values                                                
-// define c structure
-struct bcplib_map {
-    map_prototype;
-};
-// define init, finalize functions
-void map_init(id obj);
-void map_finalize(id obj);
+                        map_values_t values        
+END_DEFINE_CLASS(map)
 #endif	/* MAP_H */
 
