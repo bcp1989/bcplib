@@ -52,7 +52,9 @@ typedef void* (*map_remove_t)(id, void*);
 typedef size_t (*map_size_t)(id);
 typedef collection (*map_values_t)(id);
 // define prototype
-#define map_prototype   extends(object);\
+#define map_prototype   object_prototype;\
+                        comparator comparator;\
+                        hasher hasher;\
                         map_clear_t clear;\
                         map_contains_key_t contains_key;\
                         map_contains_value_t contains_value;\

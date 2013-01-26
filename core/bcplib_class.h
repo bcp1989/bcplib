@@ -94,9 +94,11 @@ struct bcplib_class {
 
 
 /*----- Macros for class definition -----*/
-/* Insert prototype of super class. */
-#define extends(super_name)     super_name##_prototype
-#define implements(super_name)  super_name##_interface
+/* 
+ * Recursive macro is not supportted.
+ * #define extends(super_name)     super_name##_prototype
+ * #define implements(super_name)  super_name##_interface 
+ */
 /* Define initializer of a class. */
 #define DEFINE_INITIALIZER(class_name) \
         extern void class_name##_initializer(id, class, init_flag, va_list)

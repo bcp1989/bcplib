@@ -34,13 +34,13 @@
 #include "list.h"
 /* Begin of class linkedlist_iterator. */
 BEGIN_DEFINE_CLASS(linkedlist_iterator)
-#define linkedlist_iterator_prototype      extends(list_iterator)
+#define linkedlist_iterator_prototype      list_iterator_prototype
 END_DEFINE_CLASS(linkedlist_iterator)
         
 /* Begin of class linkedlist node. */
 BEGIN_DEFINE_CLASS(linkedlist_node)
 // node prototype
-#define linkedlist_node_prototype   extends(object);\
+#define linkedlist_node_prototype   object_prototype;\
                                     linkedlist_node prev;\
                                     linkedlist_node next;\
                                     void* data
@@ -57,8 +57,8 @@ typedef void* (*linkedlist_remove_first_t)(id);
 typedef void* (*linkedlist_remove_last_t)(id);
 // linkedlist prototype
 #define linkedlist_prototype    list_prototype;\
-                                size_t linkedlist_size;\
-                                linkedlist_node head;\
+                                size_t _size;\
+                                linkedlist_node _head;\
                                 linkedlist_append_t append;\
                                 linkedlist_prepend_t prepend;\
                                 linkedlist_first_t first;\

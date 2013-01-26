@@ -45,5 +45,15 @@
 /* Universal pointer to the object */
 typedef void* id;
 
+/* 
+ * Comparator, it's a function type to let user define a function to compare 
+ * its objects.
+ */
+typedef int (*comparator)(void*, void*);
+
+/* Hash function for user to compute hash code of its data. */
+typedef size_t (*hasher)(void*);
+
+
 #endif	/* BCPLIB_TYPE_H */
 

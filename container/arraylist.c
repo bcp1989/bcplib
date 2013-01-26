@@ -58,8 +58,8 @@ static
 void init_by_size(arraylist self, size_t size) {
     assert(size > 0);
     self->elements = (void**) bcplib_malloc(sizeof (void*) * size);
-    self->arraylist_size = 0;
-    self->capacity = size;
+    self->_size = 0;
+    self->_capacity = size;
 }
 
 /* Candidate functions */
@@ -67,12 +67,12 @@ static
 void arraylist_add_all_by_data(id self, void** user_data, size_t size) {
     arraylist al = cast(arraylist, self);
     assert(size > 0);
-    al->ensure_capacity(al, al->arraylist_size + size);
-    size_t i = 0, len = al->arraylist_size + size;
-    for (i = al->arraylist_size; i < len; ++i) {
-        al->elements[i] = user_data[i - al->arraylist_size];
+    al->ensure_capacity(al, al->_size + size);
+    size_t i = 0, len = al->_size + size;
+    for (i = al->_size; i < len; ++i) {
+        al->elements[i] = user_data[i - al->_size];
     }
-    al->arraylist_size += size;
+    al->_size += size;
 }
 
 /* Collection functions */
@@ -89,20 +89,20 @@ bool arraylist_remove(id self, void* user_data) {
 void arraylist_clear(id self) {
     arraylist al = cast(arraylist, self);
     size_t i = 0;
-    for (i = 0; i < al->arraylist_size; ++i) {
+    for (i = 0; i < al->_size; ++i) {
         al->elements[i] = NULL;
     }
-    al->arraylist_size = 0;
+    al->_size = 0;
 }
 
 size_t arraylist_size(id self) {
     arraylist al = cast(arraylist, self);
-    return al->arraylist_size;
+    return al->_size;
 }
 
 bool arraylist_is_empty(id self) {
     arraylist al = cast(arraylist, self);
-    return al->arraylist_size == 0;
+    return al->_size == 0;
 }
 
 bool arraylist_contains(id self, void* user_data) {
@@ -113,25 +113,25 @@ bool arraylist_contains(id self, void* user_data) {
 /* List functions */
 void arraylist_add_at(id self, size_t idx, void* user_data) {
     arraylist al = cast(arraylist, self);
-    check_index_range(idx, 0, al->arraylist_size + 1);
-    al->ensure_capacity(al, al->arraylist_size + 1);
+    check_index_range(idx, 0, al->_size + 1);
+    al->ensure_capacity(al, al->_size + 1);
     size_t i = 0;
-    for (i = al->arraylist_size; i > idx; --i) {
+    for (i = al->_size; i > idx; --i) {
         al->elements[i] = al->elements[i - 1];
     }
     al->elements[idx] = user_data;
-    ++(al->arraylist_size);
+    ++(al->_size);
 }
 
 void* arraylist_get(id self, size_t idx) {
     arraylist al = cast(arraylist, self);
-    check_index_range(idx, 0, al->arraylist_size);
+    check_index_range(idx, 0, al->_size);
     return al->elements[idx];
 }
 
 void * arraylist_set(id self, size_t idx, void* user_data) {
     arraylist al = cast(arraylist, self);
-    check_index_range(idx, 0, al->arraylist_size);
+    check_index_range(idx, 0, al->_size);
     void* ret = al->elements[idx];
     al->elements[idx] = user_data;
     return ret;
@@ -139,20 +139,20 @@ void * arraylist_set(id self, size_t idx, void* user_data) {
 
 void* arraylist_remove_at(id self, size_t idx) {
     arraylist al = cast(arraylist, self);
-    check_index_range(idx, 0, al->arraylist_size);
+    check_index_range(idx, 0, al->_size);
     void* ret = al->elements[idx];
     size_t i = idx;
-    for (i = idx; i < al->arraylist_size - 1; ++i) {
+    for (i = idx; i < al->_size - 1; ++i) {
         al->elements[i] = al->elements[i + 1];
     }
-    --(al->arraylist_size);
+    --(al->_size);
     return ret;
 }
 
 size_t arraylist_index_of(id self, void* user_data) {
     arraylist al = cast(arraylist, self);
     size_t i = 0;
-    for (i = 0; i < al->arraylist_size; ++i) {
+    for (i = 0; i < al->_size; ++i) {
         if (al->compare(al->elements[i], user_data) == 0) {
             return i;
         }
@@ -163,7 +163,7 @@ size_t arraylist_index_of(id self, void* user_data) {
 size_t arraylist_last_index_of(id self, void* user_data) {
     arraylist al = cast(arraylist, self);
     size_t i = 0;
-    for (i = al->arraylist_size - 1; i >= 0; --i) {
+    for (i = al->_size - 1; i >= 0; --i) {
         if (al->compare(al->elements[i], user_data) == 0) {
             return i;
         }
@@ -191,7 +191,7 @@ BEGIN_IMPL_FINALIZER(arraylist_iterator)
 END_IMPL_FINALIZER(arraylist_iterator)
 list_iterator arraylist_create_list_iterator(id self, size_t idx) {
     arraylist al = cast(arraylist, self);
-    check_index_range(idx, 0, al->arraylist_size + 1);
+    check_index_range(idx, 0, al->_size + 1);
     return new(arraylist_iterator, INIT_DEFAULT, al, NULL, idx);
 }
 
@@ -199,23 +199,23 @@ list_iterator arraylist_create_list_iterator(id self, size_t idx) {
 void arraylis_trim_to_size(id self) {
     arraylist al = cast(arraylist, self);
     // TODO safe re-alloc!
-    void** new_elements = (void**) bcplib_malloc(al->arraylist_size * sizeof (void*));
+    void** new_elements = (void**) bcplib_malloc(al->_size * sizeof (void*));
     assert(new_elements != NULL);
-    bcplib_array_copy(al->elements, new_elements, 0, al->arraylist_size);
+    bcplib_array_copy(al->elements, new_elements, 0, al->_size);
     bcplib_free(al->elements);
     al->elements = new_elements;
-    al->capacity = al->arraylist_size;
+    al->_capacity = al->_size;
 }
 
 void arraylist_ensure_capacity(id self, size_t new_cap) {
     arraylist al = cast(arraylist, self);
     assert(new_cap <= MAX_CAPACITY);
-    if (new_cap <= al->capacity) {
+    if (new_cap <= al->_capacity) {
         return;
     } else {
-        size_t cap_inc = (al->capacity >> 1);
+        size_t cap_inc = (al->_capacity >> 1);
         size_t times = 0;
-        while ((al->capacity + cap_inc) < new_cap) {
+        while ((al->_capacity + cap_inc) < new_cap) {
             if (times % 2 == 0) {
                 cap_inc <<= 1;
             } else {
@@ -223,17 +223,17 @@ void arraylist_ensure_capacity(id self, size_t new_cap) {
             }
             // overflow
             if (cap_inc < 0) {
-                cap_inc = new_cap - al->capacity;
+                cap_inc = new_cap - al->_capacity;
             }
             ++times;
         }
         //void** new_elements = (void**) bcplib_realloc(al->elements,
         //        cap_inc + al->capacity);
         void** new_elements = (void**) bcplib_malloc(
-                sizeof (void *) * (cap_inc + al->capacity));
+                sizeof (void *) * (cap_inc + al->_capacity));
         size_t i = 0;
         // TODO extract to system copy
-        for (i = 0; i < al->capacity; ++i) {
+        for (i = 0; i < al->_capacity; ++i) {
             new_elements[i] = al->elements[i];
         }
 
@@ -241,7 +241,7 @@ void arraylist_ensure_capacity(id self, size_t new_cap) {
         assert(new_elements != NULL);
         bcplib_free(al->elements);
         al->elements = new_elements;
-        al->capacity += cap_inc;
+        al->_capacity += cap_inc;
     }
 }
 

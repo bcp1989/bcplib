@@ -11,6 +11,13 @@ TODO List
 7.  Find a way to completely support interface.
 8.  LONG Optimize the size of structures of classes.
 
+1/26/2013
+---------
++ Minor refactor.
++ Add hashmap class (still in process), improve map class.
++ Add string class (waiting for Tire tree, suspend).
++ Update documents.
+
 1/23/2013
 ---------
 + Improve type system. Now 'is_object' can be used to detect if a pointer points

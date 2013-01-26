@@ -29,10 +29,10 @@ static linkedlist_node locate_node(linkedlist, size_t);
 BEGIN_IMPL_INITIALIZER(linkedlist)
 init_super(flag);
 // init. linked list functions
-self->linkedlist_size = 0;
-self->head = new(linkedlist_node, INIT_DEFAULT, NULL, NULL, NULL);
-self->head->prev = self->head;
-self->head->next = self->head;
+self->_size = 0;
+self->_head = new(linkedlist_node, INIT_DEFAULT, NULL, NULL, NULL);
+self->_head->prev = self->_head;
+self->_head->next = self->_head;
 self->append = linkedlist_append;
 self->prepend = linkedlist_prepend;
 self->first = linkedlist_first;
@@ -57,8 +57,8 @@ END_IMPL_INITIALIZER(linkedlist)
 
 // Finalizer of linkedlist
 BEGIN_IMPL_FINALIZER(linkedlist)
-bcplib_free(self->head);
-self->head = NULL;
+bcplib_free(self->_head);
+self->_head = NULL;
 END_IMPL_FINALIZER(linkedlist)
 
 // Initializer of linkedlist node
@@ -89,33 +89,33 @@ END_IMPL_FINALIZER(linkedlist_node)
 static inline
 void insert_before(linkedlist ll, linkedlist_node org, void* data) {
     new(linkedlist_node, INIT_DEFAULT, org->prev, org, data);
-    ++ll->linkedlist_size;
+    ++ll->_size;
 }
 
 static inline
 void insert_after(linkedlist ll, linkedlist_node org, void* data) {
     new(linkedlist_node, INIT_DEFAULT, org, org->next, data);
-    ++ll->linkedlist_size;
+    ++ll->_size;
 }
 
 static inline
 linkedlist_node prev_node(linkedlist ll, linkedlist_node node) {
-    return node->prev == ll->head ? NULL : node->prev;
+    return node->prev == ll->_head ? NULL : node->prev;
 }
 
 static inline
 linkedlist_node next_node(linkedlist ll, linkedlist_node node) {
-    return node->next == ll->head ? NULL : node->next;
+    return node->next == ll->_head ? NULL : node->next;
 }
 
 static inline
 linkedlist_node first_node(linkedlist ll) {
-    return next_node(ll, ll->head);
+    return next_node(ll, ll->_head);
 }
 
 static inline
 linkedlist_node last_node(linkedlist ll) {
-    return prev_node(ll, ll->head);
+    return prev_node(ll, ll->_head);
 }
 
 static inline
@@ -123,7 +123,7 @@ void remove_node(linkedlist ll, linkedlist_node node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
     destroy(node);
-    --ll->linkedlist_size;
+    --ll->_size;
 }
 
 static
@@ -169,31 +169,31 @@ linkedlist_node locate_node(linkedlist ll, size_t idx) {
 /* Linked List */
 void linkedlist_append(id self, void* data) {
     linkedlist ll = cast(linkedlist, self);
-    insert_before(ll, ll->head, data);
+    insert_before(ll, ll->_head, data);
 }
 
 void linkedlist_prepend(id self, void* data) {
     linkedlist ll = cast(linkedlist, self);
-    insert_after(ll, ll->head, data);
+    insert_after(ll, ll->_head, data);
 }
 
 void* linkedlist_first(id self) {
     linkedlist ll = cast(linkedlist, self);
-    linkedlist_node node = next_node(ll, ll->head);
+    linkedlist_node node = next_node(ll, ll->_head);
     assert(node != NULL);
     return node->data;
 }
 
 void* linkedlist_last(id self) {
     linkedlist ll = cast(linkedlist, self);
-    linkedlist_node node = prev_node(ll, ll->head);
+    linkedlist_node node = prev_node(ll, ll->_head);
     assert(node != NULL);
     return node->data;
 }
 
 void* linkedlist_remove_first(id self) {
     linkedlist ll = cast(linkedlist, self);
-    linkedlist_node node = next_node(ll, ll->head);
+    linkedlist_node node = next_node(ll, ll->_head);
     assert(node != NULL);
     void* data = node->data;
     remove_node(ll, node);
@@ -202,7 +202,7 @@ void* linkedlist_remove_first(id self) {
 
 void* linkedlist_remove_last(id self) {
     linkedlist ll = cast(linkedlist, self);
-    linkedlist_node node = prev_node(ll, ll->head);
+    linkedlist_node node = prev_node(ll, ll->_head);
     assert(node != NULL);
     void* data = node->data;
     remove_node(ll, node);
@@ -291,14 +291,14 @@ bool linkedlist_remove(id self, void* data) {
 
 void linkedlist_clear(id self) {
     linkedlist ll = cast(linkedlist, self);
-    while (ll->linkedlist_size != 0) {
-        remove_node(ll, next_node(ll, ll->head));
+    while (ll->_size != 0) {
+        remove_node(ll, next_node(ll, ll->_head));
     }
 }
 
 size_t linkedlist_size(id self) {
     linkedlist ll = cast(linkedlist, self);
-    return ll->linkedlist_size;
+    return ll->_size;
 }
 
 /* List iterator interface */
@@ -321,9 +321,9 @@ BEGIN_IMPL_FINALIZER(linkedlist_iterator)
 END_IMPL_FINALIZER(linkedlist_iterator)
 list_iterator linkedlist_create_list_iterator(id self, size_t idx) {
     linkedlist ll = cast(linkedlist, self);
-    check_index_range(idx, 0, ll->linkedlist_size + 1);
+    check_index_range(idx, 0, ll->_size + 1);
     list_iterator itr = new(list_iterator, INIT_DEFAULT, ll,
-            idx == ll->linkedlist_size ? ll->head : locate_node(ll, idx), idx);
+            idx == ll->_size ? ll->_head : locate_node(ll, idx), idx);
     return itr;
 }
 

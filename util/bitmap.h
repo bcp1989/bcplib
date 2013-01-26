@@ -55,7 +55,7 @@ typedef void (*bitmap_set_all_t)(id);
 typedef void (*bitmap_clear_all_t)(id);
 typedef size_t (*bitmap_size_t)(id);
 // define bitmap prototype
-#define bitmap_prototype        extends(object);\
+#define bitmap_prototype        object_prototype;\
                                 size_t bit_num;\
                                 bit_elem *bits;\
                                 bitmap_set_t set;\

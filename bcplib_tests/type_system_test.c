@@ -2,17 +2,19 @@
 #include "tests.h"
 #include <stdarg.h>
 
+
+
 static int my_compare(void* data1, void* data2) {
     return ((*((int *) data1)) - (*((int *) data2)));
 }
-
 int type_system_test(int argc, char** argv) {
     //arraylist l = create2(arraylist, size, 1000, comparator, my_compare);
     //linkedlist l = linkedlist_create_by_comparator(my_compare);
     //test
     linkedlist l = new(linkedlist, COLLECTION_INIT_COMPARATOR, my_compare);
-
     iterator itr = l->create_iterator(l);
+    int aa = 0;
+    void* b = (void*) aa;
     printf("%s\n", classof(itr)->name);
     printf("%s %s %s\n", class_by_name(linkedlist)->name,
             class_by_name(linkedlist)->name,

@@ -28,7 +28,7 @@
 #include <bcplib/core/bcplib_base.h>
 #include <bcplib/container/list.h>
 BEGIN_DEFINE_CLASS(arraylist_iterator)
-#define arraylist_iterator_prototype   extends(list_iterator)
+#define arraylist_iterator_prototype   list_iterator_prototype
 END_DEFINE_CLASS(arraylist_iterator)
         
 BEGIN_DEFINE_CLASS(arraylist)
@@ -41,8 +41,8 @@ typedef void (*arraylist_ensure_capacity_t)(id, size_t);
 
 #define arraylist_prototype     list_prototype;\
                                 void** elements;\
-                                size_t capacity;\
-                                size_t arraylist_size;\
+                                size_t _capacity;\
+                                size_t _size;\
                                 arraylist_trim_to_size_t trim_to_size;\
                                 arraylist_ensure_capacity_t ensure_capacity
 

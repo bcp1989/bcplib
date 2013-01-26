@@ -21,14 +21,8 @@ The interface of bcplib is very simple.
 
 Create && destroy Object
 ------------------------
-`class_name A = create(class_name);` for "new" a Object and 
-`destory(class_instance);` for "release" a Object.
-
-For constructors with arguments, there are a set of `create` functions named as
-`createN();` where *N* is the number of arguments. Currently, only zero to three
-arguments are supported. For example, 
-`class_name a = create1(class_name, argument1_name, argument1_value);`
-will call the specific initialization function with 1 argument.
+`class_name A = new(class_name, arg1, arg2,...);` to "new" a Object and 
+`destory(class_instance);` to "release" a Object.
 
 Function call
 -------------
@@ -55,27 +49,45 @@ later one will do the type check.
 Class Type
 ----------
 Every object has a class type structure to indicate the type of the object.
-To check if a object is exactly the instance of a class, use
-`instanceof`. To check if a object inherits/extends or is a instance of a class,
-use `kindof`.
++ To check if a object is exactly the instance of a class, use
+    `instanceof`. 
++ To check if a object inherits/extends or is a instance of a class,
+    use `kindof`. 
++ To check whether a c pointer points to a object or something else, use 
+    `is_object`.
++ To get the class type of a object instance, use `classof`.
++ To get the class type of a given class name, use `class_by_name`.
+
 
 Conventions for developing bcplib
 ---------------------------------
-1. The construction and deconstruction function should be named as
-   `class_name_create();` and `class_name_destroy(id obj);`, for constructors
-   with arguments, the name should be
-   `class_name_create_by_arg1_name_arg2_name(arg1, arg2);`
-2. There should be a class_name_prototype macro used to be inherited. For a 
-   example of the macro, please see \<bcplib/container/arraylist.h\>
-3. Structure name should not be the same with the class name.
-4. Call `DEFINE_CLASS` at header file, and call `INIT_CLASS` in the source file.
-   Please see any class inside bcplib for more detail.
+Please see convention.md for the latest convention list.
++ User must define a 'X_prototype' macro which includes all attributes and
+    methods for their class.
++ User must define a 'X_interface' macro which includes all attributes and 
+    methods for their interface.
++ Inside the prototype, 'extends' should always be the first elements.
++ All macros in upper letters should be used outside function blocks, 
+    all macros in lower letters should be used inside function blocks.
++ Inside initializer and finalizer functions, 'self' is a keywords can be used
+    as a pointer to the object instance, and 'flag' is a extra information to
+    decide how to initialize the object instance ('overload'). User can use
+    the flag in any way they like (or Please see the class in bcplib for
+    recommend style). Note that 'INIT_DEFAULT' is preserved to indicate the
+    default initializer and its value is 0.
+    Note that in bcplib, some flag value are conflict with each other, I solve
+    it by simply set a priority of flags. Flags with low priority won't valid 
+    if a flag with higher priority is set.
++ The range of size_t is from -1 to (2^8)^(sizeof(size_t) - 1. If you cast 
+    size_t into some signed number, -1 will be the max value of the size_t,
+    so I preserve the max value to represent -1 so that many functions can be
+    benefit it.
 
 OO in bcplib
 ============
 Like Java, bcplib support concepts of class, single inherit/extends, interface, 
 abstract class, final class. However, some of the concepts are not 100% the same 
-as Java. Especially, the concept *inherit* and *extend* in bcplib are different.
+as Java. 
 
 Things to know before start
 ---------------------------

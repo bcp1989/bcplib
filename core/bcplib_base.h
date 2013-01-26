@@ -46,26 +46,11 @@
 #define destroy(obj) \
         (_destroy(obj))
 
-/* 
- * Comparator, it's a function type to let user define a function to compare 
- * its objects.
- */
-typedef int (*comparator)(void*, void*);
-
-/* Hash function for user to compute hash code of its data. */
-typedef size_t (*hasher)(void*);
-
 /* 'new' function */
 extern id _new(class type, init_flag flag, ...);
 
 /* 'destory' function */
 extern void _destroy(id obj);
-
-/* Initialize a object instance. */
-extern void _initialize(id obj, class class, init_flag flag, va_list args);
-
-/* Finalize a object instance. */
-extern void _finalize(id obj);
 
 /*----- Utilities -----*/
 /* Allocate a object instance in memory. */
