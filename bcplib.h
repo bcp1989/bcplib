@@ -27,17 +27,24 @@
 #define	BCPLIB_H
 
 #include <bcplib/core/object.h>
-#include <bcplib/container/set.h>
-#include <bcplib/container/map.h>
 
+/* Map framework */
+#include <bcplib/container/map.h>
+#include <bcplib/container/hashmap.h>
+
+/* Collection framework. */
 #include <bcplib/container/collection.h>
+/* ->List framework. */
 #include <bcplib/container/list.h>
 #include <bcplib/container/iterator.h>
 #include <bcplib/container/list_iterator.h>
-
-
 #include <bcplib/container/arraylist.h>
 #include <bcplib/container/linkedlist.h>
+
+/* ->Set framework. */
+#include <bcplib/container/set.h>
+
+/* Utilities */
 #include <bcplib/util/bitmap.h>
 
 #endif	/* BCPLIB_H */

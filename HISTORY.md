@@ -11,6 +11,10 @@ TODO List
 7.  Find a way to completely support interface.
 8.  LONG Optimize the size of structures of classes.
 
+1/27/2013
+---------
++ Implements parts of hashmap class, still in developing.
+
 1/26/2013
 ---------
 + Minor refactor.

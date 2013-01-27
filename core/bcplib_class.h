@@ -163,6 +163,7 @@ struct bcplib_class {
                 .finalizer = self_name##_finalizer}
 
 /* Initialize the class. */
+        
 #define INIT_CLASS(self_name, super_name, flag) \
         INIT_CLASS_TYPE(self_name, super_name, flag)
 

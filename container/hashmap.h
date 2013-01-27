@@ -29,11 +29,11 @@
 #include <bcplib/container/map.h>
 #include <bcplib/container/arraylist.h>
 BEGIN_DEFINE_CLASS(hashmap)
-#define HASHMAP_INIT_COMPARATPR 1
-#define HASHMAP_INIT_HASHER (HASHMAP_INIT_COMPARATPR << 1)
+#define HASHMAP_INIT_COMPARATOR 1
+#define HASHMAP_INIT_HASHER (HASHMAP_INIT_COMPARATOR << 1)
 #define HASHMAP_INIT_FACTOR (HASHMAP_INIT_HASHER << 1)
-#define HASHMAP_INIT_SIZE   (HASHMAP_INIT_FACTOR << 1)
-#define HASHMAP_INIT_MAP    (HASHMAP_INIT_SIZE << 1)
+#define HASHMAP_INIT_CAPACITY   (HASHMAP_INIT_FACTOR << 1)
+#define HASHMAP_INIT_MAP    (HASHMAP_INIT_CAPACITY << 1)
         
 #define hashmap_prototype   map_prototype; \
                             map_entry* _table; \

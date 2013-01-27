@@ -25,9 +25,7 @@
 
 /*
  * Lib Base 
- * Lib base contains all base function types and the object that is inherited
- * by nearly all structures in my lib.
- * This module may be separate into different modules if it increases a lot.
+ * Internal base header for developing bcplib.
  */
 #ifndef BCPLIB_BASE_H
 #define	BCPLIB_BASE_H
@@ -46,13 +44,17 @@
 #define destroy(obj) \
         (_destroy(obj))
 
-/* 'new' function */
+/* `new` */
 extern id _new(class type, init_flag flag, ...);
 
-/* 'destory' function */
+/* `destory` function */
 extern void _destroy(id obj);
 
 /*----- Utilities -----*/
+/* Find the max value. */
+#define bcplib_max(a, b) \
+        ( (a) > (b) ? (a) : (b))
+
 /* Allocate a object instance in memory. */
 #define malloc_object(class_name) \
         ((class_name) _malloc_object(class_by_name(class_name)))

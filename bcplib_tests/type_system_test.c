@@ -38,6 +38,7 @@ int type_system_test(int argc, char** argv) {
     printf("%s %u\n", class_by_name(map)->name, class_by_name(map)->size);
     printf("%s %u\n", class_by_name(arraylist)->name, class_by_name(arraylist)->size);
     printf("%s %u\n", class_by_name(linkedlist)->name, class_by_name(linkedlist)->size);
+    printf("%s %u\n", class_by_name(hashmap)->name, class_by_name(hashmap)->size);
     
     return (EXIT_SUCCESS);
 }
