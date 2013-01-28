@@ -31,6 +31,10 @@ void* bcplib_malloc(size_t size) {
     return malloc(size);
 }
 
+void* bcplib_calloc(size_t nelements, size_t bytes) {
+    return calloc(nelements, bytes);
+}
+
 void* bcplib_realloc(void* pointer, size_t new_size) {
 
     return realloc(pointer, new_size);

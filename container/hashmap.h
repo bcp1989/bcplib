@@ -28,6 +28,11 @@
 #include <bcplib/core/bcplib_base.h>
 #include <bcplib/container/map.h>
 #include <bcplib/container/arraylist.h>
+BEGIN_DEFINE_CLASS(hashmap_entry)
+#define hashmap_entry_prototype     map_entry_prototype;\
+                                    hashmap_entry next;\
+                                    size_t hash
+END_DEFINE_CLASS(hashmap_entry)
 BEGIN_DEFINE_CLASS(hashmap)
 #define HASHMAP_INIT_COMPARATOR 1
 #define HASHMAP_INIT_HASHER (HASHMAP_INIT_COMPARATOR << 1)
@@ -36,10 +41,24 @@ BEGIN_DEFINE_CLASS(hashmap)
 #define HASHMAP_INIT_MAP    (HASHMAP_INIT_CAPACITY << 1)
         
 #define hashmap_prototype   map_prototype; \
-                            map_entry* _table; \
+                            hashmap_entry* _table; \
                             size_t _size; \
                             size_t _capacity; \
                             float _load_factor
+/* Functions from map class. */        
+void hashmap_clear(id self);
+bool hashmap_contains_key(id self, void* key);
+bool hashmap_contains_value(id self, void* key, comparator cmp);
+set hashmap_entry_set(id self);
+void* hashmap_get(id self, void* key);
+bool hashmap_is_empty(id self);
+set hashmap_key_set(id self);
+void* hashmap_put(id self, void* key, void* value);
+void hashmap_put_all(id self, id m);
+void* hashmap_remove(id self, void* key);
+size_t hashmap_size(id self);
+collection hashmap_values(id self);
 END_DEFINE_CLASS(hashmap)
+      
 #endif	/* HASHMAP_H */
 

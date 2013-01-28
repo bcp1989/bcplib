@@ -1,4 +1,4 @@
-/* 
+ /* 
  * File:   bcplib_class_type.h
  * Author: Yirui Zhang
  *

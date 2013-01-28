@@ -13,8 +13,8 @@ int type_system_test(int argc, char** argv) {
     //test
     linkedlist l = new(linkedlist, COLLECTION_INIT_COMPARATOR, my_compare);
     iterator itr = l->create_iterator(l);
-    int aa = 0;
-    void* b = (void*) aa;
+    int a = {1, 4};
+    printf("%d\n", );
     printf("%s\n", classof(itr)->name);
     printf("%s %s %s\n", class_by_name(linkedlist)->name,
             class_by_name(linkedlist)->name,
@@ -25,7 +25,6 @@ int type_system_test(int argc, char** argv) {
             instanceof(itr, list_iterator));
     printf("itr kindof iterator: %d\n",
             kindof(itr, iterator));
-    int a = 4;
     printf("%d %d\n", is_object(NULL), is_object(itr));
     destroy(itr);
     destroy(l);

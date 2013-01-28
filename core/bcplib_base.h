@@ -69,6 +69,9 @@ extern id _malloc_object(class type);
 /* Malloc function, bcplib version */
 extern void* bcplib_malloc(size_t size);
 
+/* Calloc function, bcplib version. */
+extern void* bcplib_calloc(size_t nelements, size_t bytes);
+
 /* Free function, bcplib version */
 extern void bcplib_free(void* p);
 

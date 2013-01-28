@@ -41,7 +41,7 @@ BEGIN_DEFINE_CLASS(map)
 // define function types
 typedef void (*map_clear_t)(id);
 typedef bool (*map_contains_key_t)(id, void*);
-typedef bool (*map_contains_value_t)(id, void*);
+typedef bool (*map_contains_value_t)(id, void*, comparator);
 typedef set (*map_entry_set_t)(id);
 typedef void* (*map_get_t)(id, void*);
 typedef bool (*map_is_empty_t)(id);
