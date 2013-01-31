@@ -25,6 +25,6 @@ bool _instanceof(id obj, class t) {
 
 inline
 id _cast(id obj, class t) {
-    assert(_kindof(obj, t));
+    assert(obj == NULL || _kindof(obj, t));
     return obj;
 }

@@ -1,5 +1,5 @@
 #include "hashmap.h"
-/*----- Being of hashmap entry class -----*/
+/*----- Begin of hashmap entry class -----*/
 INIT_CLASS(hashmap_entry, map_entry, TYPE_NORMAL_CLASS);
 
 BEGIN_IMPL_INITIALIZER(hashmap_entry)
@@ -11,7 +11,143 @@ END_IMPL_INITIALIZER(hashmap_entry)
 BEGIN_IMPL_FINALIZER(hashmap_entry)
 // do nothing
 END_IMPL_FINALIZER(hashmap_entry)
+/*----- Begin of class hashmap iterator -----*/
+#define hashmap_iterator_find_next(next_slot, len, next_ent, ents) \
+        while ((next_slot) < (len) && ((next_ent) = (ents)[(next_slot)++]) == NULL)
+INIT_CLASS(hashmap_iterator, iterator, TYPE_NORMAL_CLASS);
+/* Initializer of class hashmap iterator */
+BEGIN_IMPL_INITIALIZER(hashmap_iterator)
+init_super(flag);
+// init functions.
+self->has_next = hashmap_iterator_hash_next;
+self->next = hashmap_iterator_next;
+self->remove = hashmap_iterator_remove;
+// init data.
+hashmap hm = cast(hashmap, self->host);
+self->next_slot = 0;
+self->aux = NULL;
+hashmap_entry ents = hm->_table;
+hashmap_iterator_find_next(self->next_slot, hm->_size, self->next_ent, ents);
+END_IMPL_INITIALIZER(hashmap_iterator)
+/* Finalizer if class hashmap iterator */
+BEGIN_IMPL_FINALIZER(hashmap_iterator)
+// do nothing
+END_IMPL_FINALIZER(hashmap_iterator)
 
+bool hashmap_iterator_hash_next(id self) {
+    hashmap_iterator itr = cast(hashmap_iterator, self);
+    return itr->aux != NULL;
+}
+
+void* hashmap_iterator_next(id self) {
+    hashmap_iterator itr = cast(hashmap_iterator, self);
+    hashmap hm = cast(hashmap, itr->host);
+    itr->aux = (void*) itr->next_ent;
+    itr->next_ent = itr->next_ent->next;
+    if (itr->next_ent == NULL) {    // the last elements in the current slot
+        hashmap_entry* ents = hm->_table;
+        hashmap_iterator_find_next(itr->next_slot, hm->_size, itr->next_ent, ents);
+    }
+    return itr->aux;
+}
+
+void hashmap_iterator_remove(id self) {
+    hashmap_iterator itr = cast(hashmap_iterator, self);
+    hashmap hm = cast(hashmap, itr->host);
+    assert (itr->aux != NULL);
+    hashmap_entry curr = cast(hashmap_entry, itr->aux);
+    hm->remove(hm, curr->key);
+    itr->aux = NULL;
+}
+/*----- Begin of class hashmap key iterator -----*/
+INIT_CLASS(hashmap_key_iterator, hashmap_iterator, TYPE_NORMAL_CLASS);
+/* Initializer of class hashmap key iterator */
+BEGIN_IMPL_INITIALIZER(hashmap_key_iterator)
+init_super(flag);
+self->next = hashmap_key_iterator_next;
+END_IMPL_INITIALIZER(hashmap_key_iterator)
+
+/* Finalizer of class hashmap key iterator */
+BEGIN_IMPL_FINALIZER(hashmap_key_iterator)
+// do nothing
+END_IMPL_FINALIZER(hashmap_key_iterator)
+
+void* hashmap_key_iterator_next(id self) {
+    hashmap_entry ent = (hashmap_entry)hashmap_iterator_next(self);
+    return ent->key;
+}
+
+/*----- Begin of class hashmap value iterator -----*/
+INIT_CLASS(hashmap_value_iterator, hashmap_iterator, TYPE_NORMAL_CLASS);
+/* Initializer of class hashmap value iterator */
+BEGIN_IMPL_INITIALIZER(hashmap_value_iterator)
+init_super(flag);
+self->next = hashmap_value_iterator_next;
+END_IMPL_INITIALIZER(hashmap_value_iterator)
+
+/* Finalizer of class hashmap value iterator */
+BEGIN_IMPL_FINALIZER(hashmap_value_iterator)
+// do nothing
+END_IMPL_FINALIZER(hashmap_value_iterator)
+        
+void* hashmap_value_iterator_next(id self) {
+    hashmap_entry ent = (hashmap_entry)hashmap_iterator_next(self);
+    return ent->value;
+}
+
+/*----- Begin of class hashmap entry set -----*/
+INIT_CLASS(hashmap_entry_set, set, TYPE_NORMAL_CLASS);
+/* Initializer */
+BEGIN_IMPL_INITIALIZER(hashmap_entry_set)
+init_super(flag);
+self->_host = next_arg(hashmap);
+END_IMPL_INITIALIZER(hashmap_entry_set)
+
+/* Finalizer*/
+BEGIN_IMPL_FINALIZER(hashmap_entry_set)
+// do nothing
+END_IMPL_FINALIZER(hashmap_entry_set)
+        
+iterator hashmap_entry_set_create_iterator(id self) {
+    hashmap_entry_set hes = cast(hashmap_entry_set, self);
+    return new(hashmap_iterator, INIT_DEFAULT, hes, NULL);
+}
+
+size_t hashmap_entry_set_size(id self) {
+    hashmap_entry_set hes = cast(hashmap_entry_set, self);
+    return hes->_host->_size;
+}
+
+void hashmap_entry_set_clear(id self) {
+    hashmap_entry_set hes = cast(hashmap_entry_set, self);
+    hes->_host->clear(hes->_host);
+}
+
+bool hashmap_entry_set_contains(id self, void* data) {
+    hashmap_entry_set hes = cast(hashmap_entry_set, self);
+    hashmap hm = hes->_host;
+    if (!kindof(data, hashmap_entry)) {
+        return false;
+    }
+    hashmap_entry ent = (hashmap_entry)data;
+    hashmap_entry result = hashmap_get_entry(hm, ent->key);
+    return result != NULL && hes->compare(result, ent);
+}
+        
+bool hashmap_entry_set_remove(id self, void* data) {
+    hashmap_entry_set hes = cast(hashmap_entry_set, self);
+    hashmap hm = hes->_host;
+    if (!kindof(data, hashmap_entry)) {
+        return false;
+    }
+    hashmap_entry ent = (hashmap_entry)data;
+    // TODO
+}
+/*----- Begin of class hashmap key set -----*/
+INIT_CLASS(hashmap_key_set, set, TYPE_NORMAL_CLASS);
+
+/*----- Begin of class hashmap values -----*/
+INIT_CLASS(hashmap_values, collection, TYPE_NORMAL_CLASS);
 
 /*----- Begin of hashmap class -----*/
 #define DEFAULT_CAPACITY 16
@@ -194,7 +330,7 @@ bool hashmap_contains_value(id self, void* value, comparator cmp) {
     void* k = NULL;
     for (i = 0; i < len; ++i) {
         for (ent = ents[i]; ent != NULL; ent = ent->next) {
-            if ((k = ent->value) == value || !cmp(k, value)) {
+            if ((k = ent->value) == value || (cmp != NULL && !cmp(k, value))) {
                 return true;
             }// if
         }// for - entry

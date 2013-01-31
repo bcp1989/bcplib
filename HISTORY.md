@@ -11,6 +11,11 @@ TODO List
 7.  Find a way to completely support interface.
 8.  LONG Optimize the size of structures of classes.
 
+1/30/2013
+---------
++ Implements iterators in hashmap entry set, hashmap key set and hashmap values.
++ Update readme.
+
 1/28/2013
 ---------
 + Implements all of hashmap class excepts those which returns a collection/set.
