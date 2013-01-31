@@ -51,8 +51,10 @@ consuming, in a 32-bit architecture, a <em>arraylist</em> object takes up to 104
 
 <h2>Create &amp;&amp; destroy Object</h2>
 
-<p><code>class_name A = new(class_name, arg1, arg2,...);</code> to "new" a Object and 
-<code>destory(class_instance);</code> to "release" a Object.</p>
+<p><code>class_name A = new(class_name, init_flag, arg1, arg2,...);</code> to "new" a Object 
+and <code>destory(class_instance);</code> to "release" a Object. Note that here the 
+<code>init_flag</code> is a hint of the initializer to simulate <em>override</em> and the 
+developer can use it in any way it like.</p>
 
 <h2>Function call</h2>
 
@@ -110,87 +112,11 @@ default initializer and its value is 0.
 Note that in bcplib, some flag value are conflict with each other, I solve
 it by simply set a priority of flags. Flags with low priority won't valid 
 if a flag with higher priority is set.</li>
-<li>The range of size_t is from -1 to (2^8)^sizeof(size_t) - 1. If you cast 
+<li>The range of size_t is from -1 to (2^8)^(sizeof(size_t) - 1. If you cast 
 size_t into some signed number, -1 will be the max value of the size_t,
 so I preserve the max value to represent -1 so that many functions can be
 benefit it.</li>
-</ul><h1>OO in bcplib</h1>
-
-<p>Like Java, bcplib support concepts of class, single inherit/extends, interface, 
-abstract class, final class. However, some of the concepts are not 100% the same 
-as Java. </p>
-
-<h2>Things to know before start</h2>
-
-<p>The internal represent of bcplib may be complicated, however, to provide a easy-
-to-use library, the interface of bcplib is very simple, even, a little bit 
-incompatible with the "normal" rule of software development. </p>
-
-<ul>
-<li>
-<em>id</em>, a universal pointers to <em>Object</em> in bcplib, just like <em>id</em> in 
-Objective-C. Nearly every <em>Object Function</em> takes a <em>id</em> as input, to simulate
-the <em>this</em> reference. Inside each <em>Object Function</em>, the function first cast 
-the <em>id</em> to the type it needs so that user don`t have to do the cast when use
-a function of parent class. </li>
-<li>Every class type is a pointer type. For example, "arraylist" is actually
-"arraylist_t *". You can also use your own way to allocate the structure and
-use initialize a class instead of create function. For example, normally, you
-write <code>arraylist a = arraylist_create();</code>, here <em>a</em> is a pointer type; and you
-can also write <code>arraylist_t a;</code> and then use <code>arraylist_init(&amp;a);</code> to
-initialize it, here <em>a</em> is a structure type.</li>
-</ul><h2>Class</h2>
-
-<p>In bcplib, each class is actually a structure. Every class in bcplib <em>extends</em> 
-the root class <em>Object</em>. We need the following things to define a class:</p>
-
-<ul>
-<li>A <em>prototype</em> of class, defined by using a macro.</li>
-<li>Definition for each function type.</li>
-<li>Functions to <em>create</em> and <em>destroy</em> a class.</li>
-<li>Functions to <em>initialize</em> and <em>finalize</em> a class.</li>
-</ul><h2>Prototype</h2>
-
-<p>In order to let others inherits/extends itself, one <em>Class</em> should define a 
-prototype of itself. The prototype is defined by using a macro, simply list all 
-data and functions.</p>
-
-<h2>Inherit</h2>
-
-<p>In bcplib, inherit is just use another set of functions to initialize a class.
-If class A inherits class B, A cannot have any function or data that B does not 
-have. For example, function <em>arraylist_create_list_iterator</em> in <em>arraylist.c</em> 
-create a anonymous class that inherits class <em>list_iterator</em> by initializing the
-class with some functions defined in <em>arraylist.c</em>.</p>
-
-<h2>Extends</h2>
-
-<p>Extends in bcplib is like Java. Class A extends class B means that A has all
-function declarations and data that B has, and A may has its own functions or 
-data that B does not have. In the prototype of A, the prototype of B should be 
-the first element so that we can cast A to B. However, this trick way is 
-depend on the structure alignment strategy in specific Compiler.</p>
-
-<h2>Interface</h2>
-
-<p>Interface is just a macro contains data or function lists. A class may includes
-the interface in any position of its prototype except the first one (first 
-element is reserved for the prototype of parent class). We cannot cast a class
-to the interface it implements. So the concept interface in bcplib is 
-incomplete compared to Java.</p>
-
-<h2>Abstract class</h2>
-
-<p>You cannot create a abstract class, so in bcplib, a class without any <em>create</em> 
-or "destroy" functions can be treated as a abstract class. User can still 
-allocate a abstract class and use "init_xxxx" function to initialize it, but 
-it's very dangerous, for the definition of such a abstract class may be 
-incomplete, any function call may lead unknown error.</p>
-
-<h2>Final class</h2>
-
-<p>You cannot extends/inherits a final class in bcplib, since final class does not 
-have a prototype as well as <em>initialize</em> and <em>finalize</em> functions.</p>
+</ul>
       </section>
     </div>
 
