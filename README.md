@@ -1,4 +1,4 @@
-bcplib
+bcplib (deprecated and a new version which has a robust type system is in developing :-)
 ======
 bcplib is a object-oriented C library of common data structures and algorithms. 
 The philosophy of bcplib is to build a easy-to-use, easy-to-extend library.
